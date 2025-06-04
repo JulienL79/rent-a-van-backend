@@ -13,18 +13,20 @@ export const userModel = {
                 lastname: users.lastname,
                 birthdate: users.birthdate,
                 email: users.email,
-                phone_number: users.phone_number,
+                phoneNumber: users.phoneNumber,
                 password: users.password,
-                created_at: users.created_at,
-                driving_license: users.driving_license,
-                address_number: users.address_number,
-                address_street: users.address_street,
-                address_city: users.address_city,
-                address_zip: users.address_zip,
-                address_country: users.address_country
+                createdAt: users.createdAt,
+                drivingLicense: users.drivingLicense,
+                addressNumber: users.addressNumber,
+                addressStreet: users.addressStreet,
+                addressCity: users.addressCity,
+                addressZip: users.addressZip,
+                addressCountry: users.addressCountry,
             }).from(users);
         } catch (err: any) {
-            logger.error(`Erreur lors de la récupération des utilisateurs: ${err.message}`);
+            logger.error(
+                `Erreur lors de la récupération des utilisateurs: ${err.message}`,
+            );
             throw new Error("Impossible de récupérer les utilisateurs");
         }
     },
@@ -37,19 +39,21 @@ export const userModel = {
                 lastname: users.lastname,
                 birthdate: users.birthdate,
                 email: users.email,
-                phone_number: users.phone_number,
+                phoneNumber: users.phoneNumber,
                 password: users.password,
-                created_at: users.created_at,
-                driving_license: users.driving_license,
-                address_number: users.address_number,
-                address_street: users.address_street,
-                address_city: users.address_city,
-                address_zip: users.address_zip,
-                address_country: users.address_country
+                createdAt: users.createdAt,
+                drivingLicense: users.drivingLicense,
+                addressNumber: users.addressNumber,
+                addressStreet: users.addressStreet,
+                addressCity: users.addressCity,
+                addressZip: users.addressZip,
+                addressCountry: users.addressCountry,
             }).from(users)
                 .where(eq(users.id, id));
         } catch (err: any) {
-            logger.error(`Erreur lors de la récupération de l'utilisateur: ${err.message}`);
+            logger.error(
+                `Erreur lors de la récupération de l'utilisateur: ${err.message}`,
+            );
             throw new Error("Impossible de récupérer l'utilisateur");
         }
     },
@@ -59,11 +63,13 @@ export const userModel = {
             return await db.select({
                 id: users.id,
                 password: users.password,
-                email: users.email
+                email: users.email,
             }).from(users)
                 .where(eq(users.email, email));
         } catch (err: any) {
-            logger.error(`Erreur lors de la récupération de l'utilisateur: ${err.message}`);
+            logger.error(
+                `Erreur lors de la récupération de l'utilisateur: ${err.message}`,
+            );
             throw new Error("Impossible de récupérer l'utilisateur");
         }
     },
@@ -76,15 +82,15 @@ export const userModel = {
                 lastname,
                 birthdate,
                 email,
-                phone_number,
+                phoneNumber,
                 password,
-                created_at,
-                driving_license,
-                address_number,
-                address_street,
-                address_city,
-                address_zip,
-                address_country
+                createdAt,
+                drivingLicense,
+                addressNumber,
+                addressStreet,
+                addressCity,
+                addressZip,
+                addressCountry,
             } = user;
 
             return await db.insert(users).values({
@@ -92,18 +98,20 @@ export const userModel = {
                 lastname,
                 birthdate,
                 email,
-                phone_number,
+                phoneNumber,
                 password,
-                created_at,
-                driving_license,
-                address_number,
-                address_street,
-                address_city,
-                address_zip,
-                address_country
+                createdAt,
+                drivingLicense,
+                addressNumber,
+                addressStreet,
+                addressCity,
+                addressZip,
+                addressCountry,
             }).returning({ id: users.id });
         } catch (err: any) {
-            logger.error(`Erreur lors de la création de l'utilisateur: ${err.message}`);
+            logger.error(
+                `Erreur lors de la création de l'utilisateur: ${err.message}`,
+            );
             throw new Error("Impossible de créer l'utilisateur");
         }
     },
@@ -112,7 +120,9 @@ export const userModel = {
         try {
             return await db.update(users).set(user).where(eq(users.id, id));
         } catch (err: any) {
-            logger.error(`Erreur lors de la mise à jour de l'utilisateur: ${err.message}`);
+            logger.error(
+                `Erreur lors de la mise à jour de l'utilisateur: ${err.message}`,
+            );
             throw new Error("Impossible de mettre à jour l'utilisateur");
         }
     },
@@ -121,8 +131,10 @@ export const userModel = {
         try {
             return await db.delete(users).where(eq(users.id, id));
         } catch (err: any) {
-            logger.error(`Erreur lors de la suppression de l'utilisateur: ${err.message}`);
+            logger.error(
+                `Erreur lors de la suppression de l'utilisateur: ${err.message}`,
+            );
             throw new Error("Impossible de supprimer l'utilisateur");
         }
-    }
+    },
 };

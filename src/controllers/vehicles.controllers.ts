@@ -8,7 +8,7 @@ const vehiclesController = {
         try {
             const { id } = request.params;
             logger.info("[GET] Récupérer un véhicule") // Log d'information en couleur
-            const [vehicle] = await vehiclesModel.get(id);
+            const vehicle = await vehiclesModel.get(id);
             if (!vehicle) {
                 return APIResponse(response, null, "Véhicule inexistant", 404);
             }
@@ -139,7 +139,7 @@ const vehiclesController = {
             APIResponse(response, null, "Erreur lors de la màj du véhicule", 500);
         }
     },
-    getAllbyUser: async (request: Request, response: Response) => {
+    getAllByUser: async (request: Request, response: Response) => {
         try {
             const { id } = request.params;
             logger.info(`[GET] Récupérer tous les véhicules de l'utilisateur : ${id}`) // Log d'information en couleur

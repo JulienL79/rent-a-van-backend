@@ -28,7 +28,7 @@ export const vehiclesModel = {
             throw new Error("Le véhicule ne peut pas être supprimé");
         }
     },
-    update: (id: string, ownerId: string, vehicle: NewVehicle) => {
+    update: (id: string, ownerId: string, vehicle: Partial<NewVehicle>) => {
         try {
             return db.update(vehicles).set(vehicle).where(
                 and(

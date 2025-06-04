@@ -14,7 +14,7 @@ export const userRegisterValidation = z.object({
         .trim()
         .email({ message: "Adresse email invalide" })
         .max(255, { message: "L'email ne doit pas dépasser 255 caractères" }),
-    phone_number: z.string()
+    phoneNumber: z.string()
         .trim()
         .min(1, { message: "Le numéro de téléphone est requis" })
         .max(20, { message: "Le numéro de téléphone ne doit pas dépasser 20 caractères" }),
@@ -24,28 +24,28 @@ export const userRegisterValidation = z.object({
         .max(255, { message: "Le mot de passe ne doit pas dépasser 255 caractères" })
         .regex(/[0-9]/, { message: "Votre mot de passe doit contenir au moins un chiffre" })
         .regex(/[!@#$%^&*(),.?":{}|<>]/, { message: "Votre mot de passe doit contenir au moins un caractère spécial" }),
-    created_at: z.coerce.date().optional(),
-    driving_license: z.string()
+    createdAt: z.coerce.date().optional(),
+    drivingLicense: z.string()
         .trim()
         .max(255, { message: "Le permis de conduire ne doit pas dépasser 255 caractères" })
         .optional()
         .or(z.literal("").transform(() => undefined)),
-    address_number: z.coerce.number()
+    addressNumber: z.coerce.number()
         .int({ message: "Le numéro d'adresse doit être un entier" })
         .positive({ message: "Le numéro d'adresse doit être positif" })
         .optional(),
-    address_street: z.string()
+    addressStreet: z.string()
         .trim()
         .min(1, { message: "La rue est requise" })
         .max(255, { message: "La rue ne doit pas dépasser 255 caractères" }),
-    address_city: z.string()
+    addressCity: z.string()
         .trim()
         .min(1, { message: "La ville est requise" })
         .max(255, { message: "La ville ne doit pas dépasser 255 caractères" }),
-    address_zip: z.string()
+    addressZip: z.string()
         .trim()
         .length(5, { message: "Le code postal doit contenir 5 caractères" }),
-    address_country: z.string()
+    addressCountry: z.string()
         .trim()
         .min(1, { message: "Le pays est requis" })
         .max(255, { message: "Le pays ne doit pas dépasser 255 caractères" }),

@@ -4,6 +4,7 @@ import logger from "../utils/logger";
 import { userModel } from "../models/users.model";
 import { userRegisterValidation } from "../validations/users.validations";
 import { z } from "zod";
+import { hashPassword } from "../utils/password";
 
 const usersController = {
     getAll: async (request: Request, response: Response) => {
@@ -17,7 +18,7 @@ const usersController = {
         }
     },
 
-    getById: async (request: Request, response: Response) => {
+    get: async (request: Request, response: Response) => {
         try {
             const { id } = request.params;
             const [user] = await userModel.get(id);
@@ -34,35 +35,6 @@ const usersController = {
             APIResponse(response, null, "Erreur lors de la récupération de l'user", 500);
         }
     },
-
-    create: async (request: Request, response: Response) => {
-        try {
-            const userData = userRegisterValidation.parse(request.body);
-
-            // Vérifier si l'email existe déjà
-            const [emailAlreadyExists] = await userModel.findByCredentials(userData.email);
-            if (emailAlreadyExists) {
-                return APIResponse(response, null, "Cette adresse email est déjà utilisée", 400);
-            }
-
-            // Hash du mot de passe (à adapter si besoin)
-            // const hash = await hashPassword(userData.password);
-            // if (!hash) return APIResponse(response, null, "Erreur lors du hash", 500);
-            // userData.password = hash;
-
-            const [newUser] = await userModel.create(userData);
-            if (!newUser)
-                return APIResponse(response, null, "Un problème est survenu", 500);
-            APIResponse(response, newUser.id, "Utilisateur créé", 201);
-        } catch (err: any) {
-            logger.error("Erreur lors de la création de l'utilisateur: " + err.message);
-            if (err instanceof z.ZodError) {
-                return APIResponse(response, err.errors, "Le formulaire est invalide", 400);
-            }
-            APIResponse(response, null, "Erreur lors de la création de l'utilisateur", 500);
-        }
-    },
-
     update: async (request: Request, response: Response) => {
         try {
             const { id } = request.params;

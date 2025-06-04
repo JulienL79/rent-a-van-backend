@@ -2,18 +2,18 @@ import { Router } from "express";
 import vehiclesController from "../controllers/vehicles.controllers";
 import { isAuthenticated } from "../middlewares";
 
-const router = Router();
+const vehiclesRouter = Router();
 
-router.get("/:id", vehiclesController.get);
+vehiclesRouter.get("/:id", vehiclesController.get);
 
-router.get("/", isAuthenticated, vehiclesController.getAll);
+vehiclesRouter.get("/", isAuthenticated, vehiclesController.getAll);
 
-router.get("/user/:id", isAuthenticated, vehiclesController.getAllByUser);
+vehiclesRouter.get("/user/:id", isAuthenticated, vehiclesController.getAllByUser);
 
-router.post("/", vehiclesController.create);
+vehiclesRouter.post("/", vehiclesController.create);
 
-router.put("/:id", vehiclesController.update);
+vehiclesRouter.put("/:id", vehiclesController.update);
 
-router.delete("/:id", vehiclesController.delete);
+vehiclesRouter.delete("/:id", vehiclesController.delete);
 
-export default router;
+export default vehiclesRouter;

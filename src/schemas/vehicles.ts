@@ -18,7 +18,7 @@ export const vehicles = pgTable("vehicles", {
     numberOfSleepingPlaces: smallint("number_of_sleeping_place").notNull(),
     length: numeric("length", { precision: 4, scale: 2 }).notNull(),
     height: numeric("height", { precision: 4, scale: 2 }).notNull(),
-    weigth: numeric("weight", { precision: 10, scale: 2 }).notNull(),
+    weight: numeric("weight", { precision: 10, scale: 2 }).notNull(),
     fuelType: fuelTypeEnum().notNull(),
     gearType: gearTypeEnum().notNull(),
     consumption: numeric("consumption", { precision: 5, scale: 2 }).notNull(),

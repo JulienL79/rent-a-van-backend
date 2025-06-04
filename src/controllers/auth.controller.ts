@@ -44,7 +44,7 @@ const authController = {
     },
     register: async (request: Request, response: Response) => {
         try {
-            const { firstname, lastname, birthdate, email, phone_number, password, created_at, driving_license, address_number, address_street, address_city, address_zip, address_country } = userRegisterValidation.parse(request.body);
+            const { firstname, lastname, birthdate, email, phoneNumber, password, createdAt, drivingLicense, addressNumber, addressStreet, addressCity, addressZip, addressCountry } = userRegisterValidation.parse(request.body);
 
             // on vérifie qu'un user n'a pas déjà cet adresse email
             const [ emailAlreadyExists ] = await userModel.findByCredentials(email);
@@ -60,7 +60,7 @@ const authController = {
             }
 
             // On ajoute le new user dans la db avec le mdp hashé
-            const [ newUser ] = await userModel.create({ firstname, lastname, birthdate, email, phone_number, password: hash, created_at, driving_license, address_number, address_street, address_city, address_zip, address_country })
+            const [ newUser ] = await userModel.create({ firstname, lastname, birthdate, email, phoneNumber, password: hash, createdAt, drivingLicense, addressNumber, addressStreet, addressCity, addressZip, addressCountry })
             if (!newUser)
                 return APIResponse(response, null, "Un problème est survenu", 500);
             APIResponse(response, newUser.id, "Vous êtes inscrit", 200);
