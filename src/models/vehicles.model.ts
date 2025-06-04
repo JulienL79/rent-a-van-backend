@@ -1,0 +1,109 @@
+import { db } from "../config/pool";
+import { NewVehicle } from "../entities/Vehicle";
+import { vehicles, users, pictures } from "../schemas";
+import logger from "../utils/logger";
+import { and, eq } from "drizzle-orm";
+
+export const vehiclesModel = {
+    create: (vehicle: NewVehicle) => {
+        try {
+            return db.insert(vehicles).values(vehicle).returning({
+                id: vehicles.id
+            }).execute();
+        } catch (error: any) {
+            logger.error("Impossible de créer le véhicule:", error.message);
+            throw new Error("Le véhicule n'a pas pu être créée");
+        }
+    },
+    delete: (id: string, ownerId: string) => {
+        try {
+            return db.delete(vehicles).where(
+                and(
+                    eq(vehicles.id, id),
+                    eq(vehicles.ownerId, ownerId)
+                )
+            )
+        } catch (err: any) {
+            logger.error("Impossible de supprimer le véhicule: +", err.message);
+            throw new Error("Le véhicule ne peut pas être supprimé");
+        }
+    },
+    update: (id: string, ownerId: string, vehicle: NewVehicle) => {
+        try {
+            return db.update(vehicles).set(vehicle).where(
+                and(
+                    eq(vehicles.id, id),
+                    eq(vehicles.ownerId, ownerId)
+                )
+            ).execute();
+        } catch (err: any) {
+            logger.error("Impossible d'update le véhicule: +", err.message);
+            throw new Error("Le véhicule ne peut pas être màj");
+        }
+    },
+    getAllByUser: (userId: string) => {
+        try {
+            return db.select({
+                id: vehicles.id,
+                brand: vehicles.brand,
+                model: vehicles.model,
+                pictures: {
+                    id: pictures.id,
+                    alt: pictures.alt,
+                    src: pictures.src
+                }
+            }).from(vehicles)
+            .leftJoin(
+                pictures, eq(vehicles.id, pictures.vehiclesId)
+            )
+            .where(
+                eq(vehicles.ownerId, userId)
+            )
+            .execute()
+        } catch (err: any) {
+            logger.error(`Impossible de récupérer les véhicules de ${userId}: +`, err.message);
+            return [];
+        }
+    },
+    get: (id: string) => {
+        try {
+            return db.select({
+                id: vehicles.id,
+                brand: vehicles.brand,
+                model: vehicles.model,
+                owner: {
+                    id: users.id,
+                    username: users.username,
+                },
+                pictures: {
+                    id: pictures.id,
+                    alt: pictures.alt,
+                    src: pictures.src
+                },
+            }).from(vehicles)
+            .leftJoin(
+                users, eq(vehicles.ownerId, users.id)
+            ).where(
+                eq(vehicles.id, id)
+            ).execute();
+        } catch (err: any) {
+            logger.error("Impossible de récupérer le véhicule: +", err.message);
+            throw new Error("Le véhicule ne peut pas être récupéré");
+        }
+    },
+}
+
+                // registrationDate: vehicles.registrationDate,
+                // registrationPlate: vehicles.registrationPlate,
+                // mileage: vehicles.mileage,
+                // description: vehicles.description,
+                // numberOfSeats: vehicles.numberOfSeats,
+                // numberOfSleepingPlaces: vehicles.numberOfSleepingPlaces,
+                // length: vehicles.length,
+                // height: vehicles.height,
+                // weigth: vehicles.weigth,
+                // fuelType: vehicles.fuelType,
+                // gearType: vehicles.gearType,
+                // consumption: vehicles.consumption,
+                // city: vehicles.city,
+                // basePrice: vehicles.basePrice,
