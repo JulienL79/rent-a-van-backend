@@ -12,7 +12,7 @@ export const isAuthenticated = (request: Request, response: Response, next: Next
 
     try {
         const decoded = jwt.verify(accessToken, JWT_SECRET)
-        // v en dessous, c'est que verify est bien passé correctement !
+        // en dessous, c'est que verify est bien passé correctement !
         response.locals.user = decoded;
         next();
     } catch (err: any) {
