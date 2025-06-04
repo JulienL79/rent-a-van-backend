@@ -1,4 +1,4 @@
-import { pgTable, varchar, uuid, timestamp, smallint, pgEnum, integer } from "drizzle-orm/pg-core";
+import { pgTable, varchar, uuid, timestamp, smallint, pgEnum, integer, numeric, boolean } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
 const fuelTypeEnum = pgEnum("fuel_type", ["diesel", "petrol", "electric", "hybrid", "other"]);
@@ -16,15 +16,16 @@ export const vehicles = pgTable("vehicles", {
     description: varchar("description", { length: 500 }).notNull(),
     numberOfSeats: smallint("number_of_seat").notNull(),
     numberOfSleepingPlaces: smallint("number_of_sleeping_place").notNull(),
-    length: smallint("length").notNull(),
-    height: smallint("height").notNull(),
-    weigth: smallint("weight").notNull(),
+    length: numeric("length", { precision: 4, scale: 2 }).notNull(),
+    height: numeric("height", { precision: 4, scale: 2 }).notNull(),
+    weigth: numeric("weight", { precision: 10, scale: 2 }).notNull(),
     fuelType: fuelTypeEnum().notNull(),
     gearType: gearTypeEnum().notNull(),
-    consumption: smallint("consumption").notNull(),
+    consumption: numeric("consumption", { precision: 5, scale: 2 }).notNull(),
     cityName: varchar("city_name", { length: 100 }).notNull(),
     cityCoordinates: varchar("city_coordinates", { length: 100 }).notNull(),
     insuranceNumber: varchar("insurance_number", { length: 100 }).notNull(),
     insuranceExpirationDate: timestamp("insurance_expiration_date").notNull(),
-    basePrice: smallint("base_price").notNull(),
+    basePrice: numeric("base_price", { precision: 10, scale: 2 }).notNull(),
+    isAvailable: boolean("is_available").default(false)
 });

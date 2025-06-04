@@ -1,5 +1,5 @@
 import { db } from "../config/pool";
-import { NewVehicle } from "../entities/Vehicle";
+import { NewVehicle } from "../entities";
 import { vehicles, users, pictures } from "../schemas";
 import logger from "../utils/logger";
 import { and, eq } from "drizzle-orm";
@@ -41,54 +41,99 @@ export const vehiclesModel = {
             throw new Error("Le véhicule ne peut pas être màj");
         }
     },
-    getAllByUser: (userId: string) => {
+    getAllByUser: (ownerId: string) => {
         try {
-            return db.select({
-                id: vehicles.id,
-                brand: vehicles.brand,
-                model: vehicles.model,
-                pictures: {
-                    id: pictures.id,
-                    alt: pictures.alt,
-                    src: pictures.src
+            return db.query.vehicles.findMany({
+                where: eq(vehicles.ownerId, ownerId),
+                columns: {
+                    id: true,
+                    brand: true,
+                    model: true,
+                    registrationDate: true,
+                    registrationPlate: true,
+                    cityName: true,
+                    basePrice: true,
+                    isAvailable: true,
+                },
+                with: {
+                    pictures: {
+                        columns: {
+                            id: true,
+                            alt: true,
+                            src: true
+                        }
+                    }
                 }
-            }).from(vehicles)
-            .leftJoin(
-                pictures, eq(vehicles.id, pictures.vehiclesId)
-            )
-            .where(
-                eq(vehicles.ownerId, userId)
-            )
-            .execute()
+            })
         } catch (err: any) {
-            logger.error(`Impossible de récupérer les véhicules de ${userId}: +`, err.message);
+            logger.error(`Impossible de récupérer les véhicules de ${ownerId}: +`, err.message);
             return [];
         }
     },
     get: (id: string) => {
         try {
-            return db.select({
-                id: vehicles.id,
-                brand: vehicles.brand,
-                model: vehicles.model,
-                owner: {
-                    id: users.id,
-                    username: users.username,
-                },
-                pictures: {
-                    id: pictures.id,
-                    alt: pictures.alt,
-                    src: pictures.src
-                },
-            }).from(vehicles)
-            .leftJoin(
-                users, eq(vehicles.ownerId, users.id)
-            ).where(
-                eq(vehicles.id, id)
-            ).execute();
+            return db.query.vehicles.findFirst({
+                where: eq(vehicles.id, id),
+                with: {
+                    pictures: {
+                        columns: {
+                            id: true,
+                            alt: true,
+                            src: true
+                        }
+                    },
+                    user: {
+                        columns: {
+                            id: true,
+                            firstName: true,
+                            lastName: true
+                        },
+                        with: {
+                            pictures: {
+                                columns: {
+                                    id: true,
+                                    alt: true,
+                                    src: true
+                                }
+                            }
+                        }
+                    }
+                }
+            })
         } catch (err: any) {
             logger.error("Impossible de récupérer le véhicule: +", err.message);
             throw new Error("Le véhicule ne peut pas être récupéré");
+        }
+    },
+    getAll: (isAdmin: boolean) => {
+        try {
+            if(!isAdmin) {
+                throw new Error ("Vous n'êtes pas administrateur")
+            }
+            return db.query.vehicles.findMany({
+                columns: {
+                    id: true,
+                    brand: true,
+                    model: true,
+                    registrationDate: true,
+                    registrationPlate: true,
+                    cityName: true,
+                    basePrice: true,
+                    isAvailable: true,
+                },
+                with: {
+                    user: {
+                        columns: {
+                            id: true,
+                            firstName: true,
+                            lastName: true
+                        }
+                    }
+                }
+            })
+        } catch (err: any) {
+            logger.error(`Impossible de récupérer les véhicules: +`, err.message);
+            return [];
         }
     },
 }
