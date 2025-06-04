@@ -1,6 +1,6 @@
 import { db } from "../config/pool";
 import { NewVehicle } from "../entities";
-import { vehicles, users, pictures } from "../schemas";
+import { vehicles } from "../schemas";
 import logger from "../utils/logger";
 import { and, eq } from "drizzle-orm";
 
@@ -8,34 +8,35 @@ export const vehiclesModel = {
     create: (vehicle: NewVehicle) => {
         try {
             return db.insert(vehicles).values(vehicle).returning({
-                id: vehicles.id
+                id: vehicles.id,
             }).execute();
         } catch (error: any) {
             logger.error("Impossible de créer le véhicule:", error.message);
             throw new Error("Le véhicule n'a pas pu être créée");
         }
     },
-    delete: (id: string, ownerId: string) => {
+    delete: (id: string, userId: string, isAdmin: boolean) => {
         try {
-            return db.delete(vehicles).where(
-                and(
-                    eq(vehicles.id, id),
-                    eq(vehicles.ownerId, ownerId)
-                )
-            )
+            const query = isAdmin
+                ? db.delete(vehicles).where(eq(vehicles.id, id)) // Supprime sans condition sur ownerId
+                : db.delete(vehicles).where(
+                    and(eq(vehicles.id, id), eq(vehicles.ownerId, userId)),
+                ); // Vérifie le propriétaire
+
+            return query.execute();
         } catch (err: any) {
-            logger.error("Impossible de supprimer le véhicule: +", err.message);
+            logger.error("Impossible de supprimer le véhicule: ", err.message);
             throw new Error("Le véhicule ne peut pas être supprimé");
         }
     },
-    update: (id: string, ownerId: string, vehicle: Partial<NewVehicle>) => {
+    update: (id: string, ownerId: string, isAdmin: boolean, vehicle: Partial<NewVehicle>) => {
         try {
-            return db.update(vehicles).set(vehicle).where(
-                and(
-                    eq(vehicles.id, id),
-                    eq(vehicles.ownerId, ownerId)
-                )
-            ).execute();
+            const query = isAdmin
+                ? db.update(vehicles).set(vehicle).where(eq(vehicles.id, id))
+                : db.update(vehicles).set(vehicle).where(
+                and(eq(vehicles.id, id), eq(vehicles.ownerId, ownerId)))
+
+            return query.execute()
         } catch (err: any) {
             logger.error("Impossible d'update le véhicule: +", err.message);
             throw new Error("Le véhicule ne peut pas être màj");
@@ -60,13 +61,16 @@ export const vehiclesModel = {
                         columns: {
                             id: true,
                             alt: true,
-                            src: true
-                        }
-                    }
-                }
-            })
+                            src: true,
+                        },
+                    },
+                },
+            });
         } catch (err: any) {
-            logger.error(`Impossible de récupérer les véhicules de ${ownerId}: +`, err.message);
+            logger.error(
+                `Impossible de récupérer les véhicules de ${ownerId}: +`,
+                err.message,
+            );
             return [];
         }
     },
@@ -79,27 +83,27 @@ export const vehiclesModel = {
                         columns: {
                             id: true,
                             alt: true,
-                            src: true
-                        }
+                            src: true,
+                        },
                     },
                     user: {
                         columns: {
                             id: true,
                             firstName: true,
-                            lastName: true
+                            lastName: true,
                         },
                         with: {
                             pictures: {
                                 columns: {
                                     id: true,
                                     alt: true,
-                                    src: true
-                                }
-                            }
-                        }
-                    }
-                }
-            })
+                                    src: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            });
         } catch (err: any) {
             logger.error("Impossible de récupérer le véhicule: +", err.message);
             throw new Error("Le véhicule ne peut pas être récupéré");
@@ -123,14 +127,17 @@ export const vehiclesModel = {
                         columns: {
                             id: true,
                             firstName: true,
-                            lastName: true
-                        }
-                    }
-                }
-            })
+                            lastName: true,
+                        },
+                    },
+                },
+            });
         } catch (err: any) {
-            logger.error(`Impossible de récupérer les véhicules: +`, err.message);
+            logger.error(
+                `Impossible de récupérer les véhicules: +`,
+                err.message,
+            );
             return [];
         }
     },
-}
+};

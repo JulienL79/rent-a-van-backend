@@ -36,13 +36,14 @@ const vehiclesController = {
                 gearType, 
                 consumption, 
                 cityName,
+                cityCoordinates,
                 insuranceNumber,
                 insuranceExpirationDate,
                 basePrice,
                 isAvailable
             } = request.body;
             const { user } = response.locals;
-            logger.info("[vehicle] Créer un véhicule") // Log d'information en couleur
+            logger.info("[POST] Créer un véhicule") // Log d'information en couleur
             const vehicle = await vehiclesModel.create({
                 ownerId: user.id,
                 brand,
@@ -60,6 +61,7 @@ const vehiclesController = {
                 gearType, 
                 consumption, 
                 cityName,
+                cityCoordinates,
                 insuranceNumber,
                 insuranceExpirationDate,
                 basePrice,
@@ -77,7 +79,7 @@ const vehiclesController = {
             const { user } = response.locals;
 
             logger.info("[DELETE] Supprimer un véhicule") // Log d'information en couleur
-            await vehiclesModel.delete(id, user.id);
+            await vehiclesModel.delete(id, user.id, user.isAdmin);
             APIResponse(response, null, "OK", 201);
         } catch (error: any) {
             logger.error("Erreur lors de la suppression du véhicule: " + error.message);
@@ -103,6 +105,7 @@ const vehiclesController = {
                 gearType, 
                 consumption, 
                 cityName,
+                cityCoordinates,
                 insuranceNumber,
                 insuranceExpirationDate,
                 basePrice,
@@ -111,7 +114,7 @@ const vehiclesController = {
             
             const { user } = response.locals;
             logger.info("[UPDATE] Update un véhicule") // Log d'information en couleur
-            await vehiclesModel.update(id, user.id, {
+            await vehiclesModel.update(id, user.id, user.isAdmin, {
                 ownerId: user.id,
                 brand,
                 model,
@@ -128,6 +131,7 @@ const vehiclesController = {
                 gearType, 
                 consumption, 
                 cityName,
+                cityCoordinates,
                 insuranceNumber,
                 insuranceExpirationDate,
                 basePrice,
@@ -159,7 +163,7 @@ const vehiclesController = {
             }
 
             logger.info("[GET] Récupérer tous les véhicules"); // Log d'information en couleur
-            const vehicles = await vehiclesModel.getAll(user.isAdmin);
+            const vehicles = await vehiclesModel.getAll();
             APIResponse(response, vehicles, "OK");
         } catch (error: any) {
             logger.error("Erreur lors de la récupération des véhicules: " + error.message);
