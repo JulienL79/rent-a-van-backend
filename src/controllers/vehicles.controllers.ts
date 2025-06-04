@@ -9,8 +9,9 @@ const vehiclesController = {
             const { id } = request.params;
             logger.info("[GET] Récupérer un véhicule") // Log d'information en couleur
             const [vehicle] = await vehiclesModel.get(id);
-            if (!vehicle)
+            if (!vehicle) {
                 return APIResponse(response, null, "Véhicule inexistant", 404);
+            }
             APIResponse(response, vehicle, "OK");
         } catch (error: any) {
             logger.error("Erreur lors de la récupération du véhicule: " + error.message);
@@ -152,9 +153,13 @@ const vehiclesController = {
     getAll: async (request: Request, response: Response) => {
         try {
             const { user } = response.locals;
-            const isAdmin = user.role === "admin"
-            logger.info("[GET] Récupérer tous les véhicules") // Log d'information en couleur
-            const vehicles = await vehiclesModel.getAll(isAdmin);
+
+            if(!user.isAdmin) {
+                return APIResponse(response, null, "Vous n'êtes pas administrateur", 403);
+            }
+
+            logger.info("[GET] Récupérer tous les véhicules"); // Log d'information en couleur
+            const vehicles = await vehiclesModel.getAll(user.isAdmin);
             APIResponse(response, vehicles, "OK");
         } catch (error: any) {
             logger.error("Erreur lors de la récupération des véhicules: " + error.message);

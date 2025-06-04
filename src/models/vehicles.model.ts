@@ -105,11 +105,8 @@ export const vehiclesModel = {
             throw new Error("Le véhicule ne peut pas être récupéré");
         }
     },
-    getAll: (isAdmin: boolean) => {
+    getAll: () => {
         try {
-            if(!isAdmin) {
-                throw new Error ("Vous n'êtes pas administrateur")
-            }
             return db.query.vehicles.findMany({
                 columns: {
                     id: true,
@@ -137,18 +134,3 @@ export const vehiclesModel = {
         }
     },
 }
-
-                // registrationDate: vehicles.registrationDate,
-                // registrationPlate: vehicles.registrationPlate,
-                // mileage: vehicles.mileage,
-                // description: vehicles.description,
-                // numberOfSeats: vehicles.numberOfSeats,
-                // numberOfSleepingPlaces: vehicles.numberOfSleepingPlaces,
-                // length: vehicles.length,
-                // height: vehicles.height,
-                // weigth: vehicles.weigth,
-                // fuelType: vehicles.fuelType,
-                // gearType: vehicles.gearType,
-                // consumption: vehicles.consumption,
-                // city: vehicles.city,
-                // basePrice: vehicles.basePrice,
