@@ -1,0 +1,20 @@
+{
+  "name": "rent-a-van-backend",
+  "version": "1.0.0",
+  "description": "API Rent-A-VAN",
+  "homepage": "https://github.com/JulienL79/rent-a-van-backend#readme",
+  "bugs": {
+    "url": "https://github.com/JulienL79/rent-a-van-backend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JulienL79/rent-a-van-backend.git"
+  },
+  "license": "ISC",
+  "author": "Julien LOISEAU",
+  "type": "commonjs",
+  "main": "server.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
