@@ -42,7 +42,7 @@ export const picturesModel = {
             throw new Error("L'image ne peut pas être màj");
         }
     },
-    getAllByVehicles: (vehicleId: string) => {
+    getAllByVehicle: (vehicleId: string) => {
         try {
             return db.select({
                 id: pictures.id,

@@ -10,10 +10,10 @@ vehiclesRouter.get("/", isAuthenticated, vehiclesController.getAll);
 
 vehiclesRouter.get("/user/:id", isAuthenticated, vehiclesController.getAllByUser);
 
-vehiclesRouter.post("/", vehiclesController.create);
+vehiclesRouter.post("/", isAuthenticated, vehiclesController.create);
 
-vehiclesRouter.put("/:id", vehiclesController.update);
+vehiclesRouter.put("/:id", isAuthenticated, vehiclesController.update);
 
-vehiclesRouter.delete("/:id", vehiclesController.delete);
+vehiclesRouter.delete("/:id", isAuthenticated, vehiclesController.delete);
 
 export default vehiclesRouter;

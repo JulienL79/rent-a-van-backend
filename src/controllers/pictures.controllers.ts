@@ -101,14 +101,14 @@ const picturesController = {
             );
         }
     },
-    getAllByVehicles: async (request: Request, response: Response) => {
+    getAllByVehicle: async (request: Request, response: Response) => {
         try {
             const { id } = request.params;
             logger.info(
                 `[GET] Récupérer tous les images de l'utilisateur : ${id}`,
             ); // Log d'information en couleur
-            const vehicles = await picturesModel.getAllByVehicles(id);
-            APIResponse(response, vehicles, "OK");
+            const pictures = await picturesModel.getAllByVehicle(id);
+            APIResponse(response, pictures, "OK");
         } catch (error: any) {
             logger.error(
                 `Erreur lors de la récupération des images de l'utilisateur cible: ` +
@@ -126,13 +126,9 @@ const picturesController = {
         try {
             const { user } = response.locals;
 
-            if (!user.isAdmin) {
-                return APIResponse(
-                    response,
-                    null,
-                    "Vous n'êtes pas administrateur",
-                    403,
-                );
+            if(!user.isAdmin) {
+                logger.error("Erreur lors de la récupération des images: réservé aux admin")
+                return APIResponse(response, null, "Vous n'êtes pas administrateur", 403);
             }
 
             logger.info("[GET] Récupérer tous les images"); // Log d'information en couleur

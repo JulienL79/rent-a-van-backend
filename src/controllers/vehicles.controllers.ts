@@ -159,6 +159,7 @@ const vehiclesController = {
             const { user } = response.locals;
 
             if(!user.isAdmin) {
+                logger.error("Erreur lors de la récupération des véhicules: réservé aux admin")
                 return APIResponse(response, null, "Vous n'êtes pas administrateur", 403);
             }
 

@@ -1,21 +1,19 @@
-// import { Router } from "express";
-// import vehiclesController from "../controllers/vehicles.controllers";
-// import { isAuthenticated } from "../middlewares";
+import { Router } from "express";
+import picturesController from "../controllers/pictures.controllers";
+import { isAuthenticated } from "../middlewares";
 
-// const picturesRouter = Router();
+const picturesRouter = Router();
 
-// picturesRouter.get("/:id", vehiclesController.get);
+picturesRouter.get("/:id", picturesController.get);
 
-// picturesRouter.get("/", isAuthenticated, vehiclesController.getAll);
+picturesRouter.get("/", isAuthenticated, picturesController.getAll);
 
-// picturesRouter.get("/user/:id", isAuthenticated, vehiclesController.getAllByUser);
+picturesRouter.get("/vehicle/:id", picturesController.getAllByVehicle);
 
+picturesRouter.post("/", isAuthenticated, picturesController.create);
 
+picturesRouter.put("/:id", isAuthenticated, picturesController.update);
 
-// picturesRouter.post("/", vehiclesController.create);
+picturesRouter.delete("/:id", isAuthenticated, picturesController.delete);
 
-// picturesRouter.put("/:id", vehiclesController.update);
-
-// picturesRouter.delete("/:id", vehiclesController.delete);
-
-// export default picturesRouter;
+export default picturesRouter;
