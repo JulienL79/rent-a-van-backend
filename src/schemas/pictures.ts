@@ -7,5 +7,5 @@ export const pictures = pgTable("pictures", {
     src: varchar("src", { length: 255 }).notNull(),
     alt: varchar("alt", { length: 255 }).notNull(),
     userId: uuid("id_users").references(() => users.id).notNull(),
-    vehicleId: uuid("id_vehicles").references(() => vehicles.id).default("")
+    vehicleId: uuid("id_vehicles").references(() => vehicles.id)
 });

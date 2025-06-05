@@ -45,9 +45,7 @@ export const userModel = {
                         },
                     },
                     pictures: {
-                        where: {
-                            vehicleId: "",
-                        },
+                        where: (fields, operators) => operators.isNull(fields.vehicleId),
                         columns: {
                             id: true,
                             src: true,
@@ -99,10 +97,8 @@ export const userModel = {
                         },
                     },
                     pictures: {
-                        where: {
-                            vehicleId: "",
-                        },
-                        column: {
+                        where: (fields, operators) => operators.isNull(fields.vehicleId),
+                        columns: {
                             id: true,
                             src: true,
                             alt: true,
@@ -164,10 +160,8 @@ export const userModel = {
                         },
                     },
                     pictures: {
-                        where: {
-                            vehicleId: "",
-                        },
-                        column: {
+                        where: (fields, operators) => operators.isNull(fields.vehicleId),
+                        columns: {
                             id: true,
                             src: true,
                             alt: true,
