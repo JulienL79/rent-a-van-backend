@@ -21,6 +21,7 @@ const vehiclesController = {
     create: async (request: Request, response: Response) => {
         try {
             const { 
+                categoryId,
                 brand, 
                 model, 
                 mileage, 
@@ -46,6 +47,7 @@ const vehiclesController = {
             logger.info("[POST] Créer un véhicule") // Log d'information en couleur
             const vehicle = await vehiclesModel.create({
                 ownerId: user.id,
+                categoryId,
                 brand,
                 model,
                 mileage, 
@@ -90,6 +92,7 @@ const vehiclesController = {
         try {
             const { id } = request.params;
             const { 
+                categoryId,
                 brand, 
                 model, 
                 mileage, 
@@ -116,6 +119,7 @@ const vehiclesController = {
             logger.info("[UPDATE] Update un véhicule") // Log d'information en couleur
             await vehiclesModel.update(id, user.id, user.isAdmin, {
                 ownerId: user.id,
+                categoryId,
                 brand,
                 model,
                 mileage, 

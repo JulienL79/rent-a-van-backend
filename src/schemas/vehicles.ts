@@ -1,5 +1,6 @@
 import { pgTable, varchar, uuid, timestamp, smallint, pgEnum, integer, numeric, boolean } from "drizzle-orm/pg-core";
 import { users } from "./users";
+import { categories } from "./categories";
 
 const fuelTypeEnum = pgEnum("fuel_type", ["diesel", "petrol", "electric", "hybrid", "other"]);
 const gearTypeEnum = pgEnum("gear_type", ["manual", "automatic"]);
@@ -7,6 +8,7 @@ const gearTypeEnum = pgEnum("gear_type", ["manual", "automatic"]);
 export const vehicles = pgTable("vehicles", {
     id: uuid("id").defaultRandom().primaryKey(),
     ownerId: uuid("id_owner").references(() => users.id, { onDelete: "cascade"}).notNull(),
+    categoryId: uuid("id_category").references(() => categories.id).notNull(),
     brand: varchar("brand", { length: 100 }).notNull(),
     model: varchar("model", { length: 100 }).notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
