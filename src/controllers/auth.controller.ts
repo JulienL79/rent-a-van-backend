@@ -8,7 +8,7 @@ import { userModel } from "../models";
 import { userRegisterValidation } from "../validations";
 import { z } from "zod";
 
-const { JWT_SECRET, NODE_ENV } = env;
+const { JWT_SECRET, NODE_ENV, ROLE_USER_ID } = env;
 
 const authController = {
     login: async (request: Request, response: Response) => {
@@ -16,13 +16,13 @@ const authController = {
             const { email, password } = request.body;
             const [ user ] = await userModel.findByCredentials(email);
             if (!user) {
-                return APIResponse(response, null, "Les identifiants saisits sont incorrects", 400);
+                return APIResponse(response, null, "Les identifiants saisis sont incorrects", 400);
             }
 
             // vérification mot de passe hashé
             const validPassword = await verifyPassword(password, user.password);
             if (!validPassword)
-                return APIResponse(response, null, "Les identifiants saisits sont incorrects", 400);
+                return APIResponse(response, null, "Les identifiants saisis sont incorrects", 400);
             // En dessous, on admet que le mot de passe saisit est le bon !
 
             // generation du jwt
@@ -57,7 +57,7 @@ const authController = {
             }
 
             // On ajoute le new user dans la db avec le mdp hashé
-            const [ newUser ] = await userModel.create({ roleId: "00000000-0000-0000-0000-000000000002", firstname, lastname, birthdate, email, phoneNumber, password: hash, createdAt, drivingLicense, addressNumber, addressStreet, addressCity, addressZip, addressCountry })
+            const [ newUser ] = await userModel.create({ roleId: ROLE_USER_ID, firstname, lastname, birthdate, email, phoneNumber, password: hash, createdAt, drivingLicense, addressNumber, addressStreet, addressCity, addressZip, addressCountry })
             if (!newUser)
                 return APIResponse(response, null, "Un problème est survenu", 500);
             APIResponse(response, newUser.id, "Vous êtes inscrit", 200);
