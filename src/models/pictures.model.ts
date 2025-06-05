@@ -1,7 +1,7 @@
 import { db } from "../config/pool";
 import { NewPicture } from "../entities";
 import { pictures } from "../schemas";
-import logger from "../utils/logger";
+import { logger } from "../utils";
 import { and, eq } from "drizzle-orm";
 
 export const picturesModel = {
@@ -15,28 +15,17 @@ export const picturesModel = {
             throw new Error("L'image n'a pas pu être créée");
         }
     },
-    delete: (id: string, userId: string, isAdmin: boolean) => {
+    delete: (id: string) => {
         try {
-            const query = isAdmin
-                ? db.delete(pictures).where(eq(pictures.id, id)) // Supprime sans condition sur vehicleId
-                : db.delete(pictures).where(
-                    and(eq(pictures.id, id), eq(pictures.usersId, userId)),
-                ); // Vérifie le propriétaire
-
-            return query.execute();
+            return db.delete(pictures).where(eq(pictures.id, id)).execute();
         } catch (err: any) {
             logger.error("Impossible de supprimer l'image: ", err.message);
             throw new Error("L'image ne peut pas être supprimé");
         }
     },
-    update: (id: string, userId: string, isAdmin: boolean, picture: Partial<NewPicture>) => {
+    update: (id: string, picture: Partial<NewPicture>) => {
         try {
-            const query = isAdmin
-                ? db.update(pictures).set(picture).where(eq(pictures.id, id))
-                : db.update(pictures).set(picture).where(
-                and(eq(pictures.id, id), eq(pictures.usersId, userId)))
-
-            return query.execute()
+            return db.update(pictures).set(picture).where(eq(pictures.id, id)).execute()
         } catch (err: any) {
             logger.error("Impossible d'update l'image: +", err.message);
             throw new Error("L'image ne peut pas être màj");

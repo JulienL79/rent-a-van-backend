@@ -1,7 +1,7 @@
 import { db } from "../config/pool";
 import { NewVehicle } from "../entities";
 import { vehicles } from "../schemas";
-import logger from "../utils/logger";
+import { logger } from "../utils";
 import { and, eq } from "drizzle-orm";
 
 export const vehiclesModel = {
@@ -15,28 +15,17 @@ export const vehiclesModel = {
             throw new Error("Le véhicule n'a pas pu être créée");
         }
     },
-    delete: (id: string, userId: string, isAdmin: boolean) => {
+    delete: (id: string) => {
         try {
-            const query = isAdmin
-                ? db.delete(vehicles).where(eq(vehicles.id, id)) // Supprime sans condition sur ownerId
-                : db.delete(vehicles).where(
-                    and(eq(vehicles.id, id), eq(vehicles.ownerId, userId)),
-                ); // Vérifie le propriétaire
-
-            return query.execute();
+            return db.delete(vehicles).where(eq(vehicles.id, id)).execute();
         } catch (err: any) {
             logger.error("Impossible de supprimer le véhicule: ", err.message);
             throw new Error("Le véhicule ne peut pas être supprimé");
         }
     },
-    update: (id: string, ownerId: string, isAdmin: boolean, vehicle: Partial<NewVehicle>) => {
+    update: (id: string, vehicle: Partial<NewVehicle>) => {
         try {
-            const query = isAdmin
-                ? db.update(vehicles).set(vehicle).where(eq(vehicles.id, id))
-                : db.update(vehicles).set(vehicle).where(
-                and(eq(vehicles.id, id), eq(vehicles.ownerId, ownerId)))
-
-            return query.execute()
+            return db.update(vehicles).set(vehicle).where(eq(vehicles.id, id)).execute()
         } catch (err: any) {
             logger.error("Impossible d'update le véhicule: +", err.message);
             throw new Error("Le véhicule ne peut pas être màj");
@@ -51,7 +40,6 @@ export const vehiclesModel = {
                     brand: true,
                     model: true,
                     registrationDate: true,
-                    registrationPlate: true,
                     cityName: true,
                     basePrice: true,
                     isAvailable: true,

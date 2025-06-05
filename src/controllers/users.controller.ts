@@ -1,10 +1,6 @@
 import { Request, Response } from "express";
-import { APIResponse } from "../utils/response";
-import logger from "../utils/logger";
-import { userModel } from "../models/users.model";
-import { userRegisterValidation } from "../validations/users.validations";
-import { z } from "zod";
-import { hashPassword } from "../utils/password";
+import { APIResponse, logger } from "../utils";
+import { userModel } from "../models";
 
 const usersController = {
     getAll: async (request: Request, response: Response) => {

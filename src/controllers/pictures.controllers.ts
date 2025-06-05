@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
-import { APIResponse } from "../utils/response";
-import logger from "../utils/logger";
+import { APIResponse, logger } from "../utils";
 import { picturesModel } from "../models";
-import { picturesRegisterValidation } from "../validations/pictures.validations";
+import { picturesRegisterValidation } from "../validations";
 
 const picturesController = {
     get: async (request: Request, response: Response) => {
@@ -57,10 +56,9 @@ const picturesController = {
     delete: async (request: Request, response: Response) => {
         try {
             const { id } = request.params;
-            const { user } = response.locals;
 
             logger.info("[DELETE] Supprimer une image"); // Log d'information en couleur
-            await picturesModel.delete(id, user.id, user.isAdmin);
+            await picturesModel.delete(id);
             APIResponse(response, null, "OK", 201);
         } catch (error: any) {
             logger.error(
@@ -83,10 +81,8 @@ const picturesController = {
                 vehiclesId,
             } = picturesRegisterValidation.parse(request.body);
 
-            const { user } = response.locals;
             logger.info("[UPDATE] Update une image"); // Log d'information en couleur
-            await picturesModel.update(id, user.id, user.isAdmin, {
-                ownerId: user.id,
+            await picturesModel.update(id, {
                 src,
                 alt,
                 vehiclesId,
@@ -125,13 +121,6 @@ const picturesController = {
     },
     getAll: async (request: Request, response: Response) => {
         try {
-            const { user } = response.locals;
-
-            if(!user.isAdmin) {
-                logger.error("Erreur lors de la récupération des images: réservé aux admin")
-                return APIResponse(response, null, "Vous n'êtes pas administrateur", 403);
-            }
-
             logger.info("[GET] Récupérer tous les images"); // Log d'information en couleur
             const vehicles = await picturesModel.getAll();
             APIResponse(response, vehicles, "OK");

@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const userRegisterValidation = z.object({
+    roleId: z.string().uuid({ message: "ID role invalide" }),
     firstname: z.string()
         .trim()
         .min(1, { message: "Le prénom est requis" })

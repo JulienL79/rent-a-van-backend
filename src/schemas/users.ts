@@ -1,9 +1,11 @@
 
 import { pgTable, uuid, varchar, timestamp, smallint } from "drizzle-orm/pg-core";
+import { roles } from "./roles";
 
 // ici users est un schéma de la table users, qui aura 3 colonnes
 export const users = pgTable("users", {
     id: uuid("id").defaultRandom().primaryKey(), // On précise la colonne id, qui sera un uuid avec une valeur par défaut aléatoire et qui sera la primary key de la table
+    roleId: uuid("id_role").references(() => roles.id).notNull(),
     firstname: varchar("firstname", { length: 255 }).notNull(), // On précise la colonne firstname qui est un varchar de taille 255 et non nul
     lastname: varchar("lastname", { length: 255 }).notNull(), // On précise la colonne lastname qui est un varchar de taille 255 et non nul
     birthdate: timestamp("birthdate").notNull(), // On précise la colonne birthdate qui est un timestamp non nul

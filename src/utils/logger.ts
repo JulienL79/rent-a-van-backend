@@ -1,6 +1,6 @@
 import { createLogger, format, transports } from "winston";
 
-const logger = createLogger({
+export const logger = createLogger({
     level: "info", // niveau de log min pour capturer (peut etre info warn debug error etc)
     format: format.combine(
         format.colorize(), // Colorise le niveau de log en fct de sa gravité (level)
@@ -15,5 +15,3 @@ const logger = createLogger({
         new transports.File({ filename: "logs/combined.log" }) // Fichier où seront TOUT les logs (sans exception)
     ]
 });
-
-export default logger;

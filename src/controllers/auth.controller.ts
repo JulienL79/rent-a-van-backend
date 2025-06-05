@@ -2,12 +2,10 @@ import { Request, Response } from "express";
 import { env } from "../config/env";
 import jwt from "jsonwebtoken";
 
-import { APIResponse } from "../utils/response";
-import logger from "../utils/logger";
-import { userModel } from "../models/users.model";
-import { hashPassword, verifyPassword } from "../utils/password";
+import { APIResponse, logger, hashPassword, verifyPassword } from "../utils";
+import { userModel } from "../models";
 
-import { userRegisterValidation } from "../validations/users.validations";
+import { userRegisterValidation } from "../validations";
 import { z } from "zod";
 
 const { JWT_SECRET, NODE_ENV } = env;

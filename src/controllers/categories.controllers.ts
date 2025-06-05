@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
-import { APIResponse } from "../utils/response";
-import logger from "../utils/logger";
+import { APIResponse, logger } from "../utils";
 import { categoriesModel } from "../models";
-import { categoriesRegisterValidation } from "../validations/categories.validations";
+import { categoriesRegisterValidation } from "../validations";
 
 const categoriesController = {
     get: async (request: Request, response: Response) => {

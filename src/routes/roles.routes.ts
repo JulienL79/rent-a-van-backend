@@ -1,17 +1,17 @@
 import { Router } from "express";
 import rolesController from "../controllers/roles.controllers";
-import { isAuthenticated } from "../middlewares";
+import { isAuthenticated, isAdminOrOwner } from "../middlewares";
 
 const rolesRouter = Router();
 
-rolesRouter.get("/:id", rolesController.get);
+rolesRouter.get("/:id", isAuthenticated, isAdminOrOwner, rolesController.get);
 
-rolesRouter.get("/", rolesController.getAll);
+rolesRouter.get("/", isAuthenticated, isAdminOrOwner, rolesController.getAll);
 
-rolesRouter.post("/", isAuthenticated, rolesController.create);
+rolesRouter.post("/", isAuthenticated, isAdminOrOwner, rolesController.create);
 
-rolesRouter.put("/:id", isAuthenticated, rolesController.update);
+rolesRouter.put("/:id", isAuthenticated, isAdminOrOwner, rolesController.update);
 
-rolesRouter.delete("/:id", isAuthenticated, rolesController.delete);
+rolesRouter.delete("/:id", isAuthenticated, isAdminOrOwner, rolesController.delete);
 
 export default rolesRouter;

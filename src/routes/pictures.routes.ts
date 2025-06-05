@@ -1,19 +1,19 @@
 import { Router } from "express";
 import picturesController from "../controllers/pictures.controllers";
-import { isAuthenticated } from "../middlewares";
+import { isAuthenticated, isAdminOrOwner } from "../middlewares";
 
 const picturesRouter = Router();
 
 picturesRouter.get("/:id", picturesController.get);
 
-picturesRouter.get("/", isAuthenticated, picturesController.getAll);
-
 picturesRouter.get("/vehicle/:id", picturesController.getAllByVehicle);
 
-picturesRouter.post("/", isAuthenticated, picturesController.create);
+picturesRouter.get("/", isAuthenticated, isAdminOrOwner, picturesController.getAll);
 
-picturesRouter.put("/:id", isAuthenticated, picturesController.update);
+picturesRouter.post("/", isAuthenticated, isAdminOrOwner, picturesController.create);
 
-picturesRouter.delete("/:id", isAuthenticated, picturesController.delete);
+picturesRouter.put("/:id", isAuthenticated, isAdminOrOwner, picturesController.update);
+
+picturesRouter.delete("/:id", isAuthenticated, isAdminOrOwner, picturesController.delete);
 
 export default picturesRouter;

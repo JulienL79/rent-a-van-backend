@@ -1,8 +1,8 @@
 import { db } from "../config/pool";
 import { NewRole } from "../entities";
 import { roles } from "../schemas";
-import logger from "../utils/logger";
-import { and, eq } from "drizzle-orm";
+import { logger } from "../utils";
+import { eq } from "drizzle-orm";
 
 export const rolesModel = {
     create: (role: NewRole) => {
