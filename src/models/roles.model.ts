@@ -5,9 +5,9 @@ import { logger } from "../utils";
 import { eq } from "drizzle-orm";
 
 export const rolesModel = {
-    create: (role: NewRole) => {
+    create: async (role: NewRole) => {
         try {
-            return db.insert(roles)
+            return await db.insert(roles)
             .values(role)
             .returning({
                 id: roles.id,
@@ -18,9 +18,9 @@ export const rolesModel = {
             throw new Error("Le role n'a pas pu être créée");
         }
     },
-    delete: (id: string) => {
+    delete: async (id: string) => {
         try {
-            return db.delete(roles)
+            return await db.delete(roles)
             .where(eq(roles.id, id))
             .execute();
         } catch (err: any) {
@@ -28,9 +28,9 @@ export const rolesModel = {
             throw new Error("Le role ne peut pas être supprimé");
         }
     },
-    update: (id: string, role: Partial<NewRole>) => {
+    update: async (id: string, role: Partial<NewRole>) => {
         try {
-            return db.update(roles)
+            return await db.update(roles)
             .set(role)
             .where(eq(roles.id, id))
             .execute()
@@ -39,9 +39,9 @@ export const rolesModel = {
             throw new Error("Le role ne peut pas être màj");
         }
     },
-    get: (id: string) => {
+    get: async (id: string) => {
         try {
-            return db.select({
+            return await db.select({
                 name: roles.name
             })
             .from(roles)
@@ -52,9 +52,9 @@ export const rolesModel = {
             throw new Error("Le role ne peut pas être récupéré");
         }
     },
-    getAll: () => {
+    getAll: async () => {
         try {
-            return db.select({
+            return await db.select({
                 name: roles.name
             })
             .from(roles)

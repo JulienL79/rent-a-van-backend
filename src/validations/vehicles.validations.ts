@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const vehiclesRegisterValidation = z.object({
-    ownerId: z.string().uuid({ message: "ID propriétaire invalide" }),
+    userId: z.string().uuid({ message: "ID propriétaire invalide" }).optional(),
     categoryId: z.string().uuid({ message: "ID catégorie invalide" }),
     brand: z.string()
         .trim()
@@ -11,9 +11,9 @@ export const vehiclesRegisterValidation = z.object({
         .trim()
         .min(1, { message: "Le modèle est requis" })
         .max(100, { message: "Le modèle ne doit pas dépasser 100 caractères" }),
-    mileage: z.number()
-        .int()
-        .min(0, { message: "Le kilométrage doit être positif" }),
+    mileage: z.coerce.string(),
+        // .int()
+        // .min(0, { message: "Le kilométrage doit être positif" }),
     registrationDate: z.coerce.date({ required_error: "La date d'immatriculation est requise" }),
     registrationPlate: z.string()
         .trim()
@@ -21,16 +21,16 @@ export const vehiclesRegisterValidation = z.object({
     description: z.string()
         .trim()
         .max(500, { message: "La description ne doit pas dépasser 500 caractères" }),
-    numberOfSeats: z.number()
-        .int()
-        .min(1, { message: "Le véhicule doit avoir au moins 1 siège" }),
-    numberOfSleepingPlaces: z.number()
-        .int()
-        .min(0, { message: "Les places pour dormir doivent être un nombre valide" }),
+    numberOfSeats: z.coerce.string(),
+        // .int()
+        // .min(1, { message: "Le véhicule doit avoir au moins 1 siège" }),
+    numberOfSleepingPlaces: z.coerce.string(),
+        // .int()
+        // .min(0, { message: "Les places pour dormir doivent être un nombre valide" }),
     length: z.coerce.string()
         .refine((val) => !isNaN(parseFloat(val)), { message: "La longueur doit être un nombre valide" })
         .refine((val) => parseFloat(val) > 0, { message: "La longueur doit être supérieur à 0" })
-        .refine((val) => parseFloat(val) < 100, { message: "La longueur doit être inférieur à 100" }),
+        .refine((val) => parseFloat(val) < 1000, { message: "La longueur doit être inférieur à 100" }),
     height: z.coerce.string()
         .refine((val) => !isNaN(parseFloat(val)), { message: "La hauteur doit être un nombre valide" })
         .refine((val) => parseFloat(val) > 0, { message: "La hauteur doit être supérieur à 0" })
@@ -57,5 +57,5 @@ export const vehiclesRegisterValidation = z.object({
     basePrice: z.coerce.string()
         .refine((val) => !isNaN(parseFloat(val)), { message: "Le prix de base doit être un nombre valide" })
         .refine((val) => parseFloat(val) > 0, { message: "Le prix de base doit être supérieur à 0" }),
-    isAvailable: z.boolean().default(false)
+    isAvailable: z.boolean().default(false).optional()
 });

@@ -50,12 +50,12 @@ const vehiclesController = {
                 categoryId,
                 brand,
                 model,
-                mileage, 
+                mileage,
                 registrationDate, 
                 registrationPlate, 
                 description, 
-                numberOfSeats, 
-                numberOfSleepingPlaces, 
+                numberOfSeats,
+                numberOfSleepingPlaces,
                 length,
                 height,
                 weight,
@@ -71,8 +71,8 @@ const vehiclesController = {
             });
             APIResponse(response, vehicle, "OK", 201);
         } catch (error: any) {
-            logger.error("Erreur lors de la récupération du véhicule: " + error.message);
-            APIResponse(response, null, "Erreur lors de la récupération du véhicule", 500);
+            logger.error("Erreur lors de la création du véhicule: " + error.message);
+            APIResponse(response, null, "Erreur lors de la création du véhicule", 500);
         }
     },
     delete: async (request: Request, response: Response) => {

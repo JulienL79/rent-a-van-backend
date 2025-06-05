@@ -5,9 +5,9 @@ import { logger } from "../utils";
 import { and, eq } from "drizzle-orm";
 
 export const picturesModel = {
-    create: (picture: NewPicture) => {
+    create: async (picture: NewPicture) => {
         try {
-            return db.insert(pictures).values(picture).returning({
+            return await db.insert(pictures).values(picture).returning({
                 id: pictures.id,
             }).execute();
         } catch (error: any) {
@@ -15,25 +15,25 @@ export const picturesModel = {
             throw new Error("L'image n'a pas pu être créée");
         }
     },
-    delete: (id: string) => {
+    delete: async (id: string) => {
         try {
-            return db.delete(pictures).where(eq(pictures.id, id)).execute();
+            return await db.delete(pictures).where(eq(pictures.id, id)).execute();
         } catch (err: any) {
             logger.error("Impossible de supprimer l'image: ", err.message);
             throw new Error("L'image ne peut pas être supprimé");
         }
     },
-    update: (id: string, picture: Partial<NewPicture>) => {
+    update: async (id: string, picture: Partial<NewPicture>) => {
         try {
-            return db.update(pictures).set(picture).where(eq(pictures.id, id)).execute()
+            return await db.update(pictures).set(picture).where(eq(pictures.id, id)).execute()
         } catch (err: any) {
             logger.error("Impossible d'update l'image: +", err.message);
             throw new Error("L'image ne peut pas être màj");
         }
     },
-    getAllByVehicle: (vehicleId: string) => {
+    getAllByVehicle: async (vehicleId: string) => {
         try {
-            return db.select({
+            return await db.select({
                 id: pictures.id,
                 alt: pictures.alt,
                 src: pictures.src
@@ -49,9 +49,9 @@ export const picturesModel = {
             return [];
         }
     },
-    get: (id: string) => {
+    get: async (id: string) => {
         try {
-            return db.select({
+            return await db.select({
                 id: pictures.id,
                 alt: pictures.alt,
                 src: pictures.src
@@ -64,9 +64,9 @@ export const picturesModel = {
             throw new Error("L'image ne peut pas être récupéré");
         }
     },
-    getAll: () => {
+    getAll: async () => {
         try {
-            return db.select({
+            return await db.select({
                 id: pictures.id,
                 alt: pictures.alt,
                 src: pictures.src,

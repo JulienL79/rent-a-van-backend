@@ -5,9 +5,9 @@ import { logger } from "../utils";
 import { eq } from "drizzle-orm";
 
 export const categoriesModel = {
-    create: (category: NewCategory) => {
+    create: async (category: NewCategory) => {
         try {
-            return db.insert(categories)
+            return await db.insert(categories)
             .values(category)
             .returning({
                 id: categories.id,
@@ -18,9 +18,9 @@ export const categoriesModel = {
             throw new Error("La catégorie n'a pas pu être créée");
         }
     },
-    delete: (id: string) => {
+    delete: async (id: string) => {
         try {
-            return db.delete(categories)
+            return await db.delete(categories)
             .where(eq(categories.id, id))
             .execute();
         } catch (err: any) {
@@ -28,9 +28,9 @@ export const categoriesModel = {
             throw new Error("La catégorie ne peut pas être supprimé");
         }
     },
-    update: (id: string, category: Partial<NewCategory>) => {
+    update: async (id: string, category: Partial<NewCategory>) => {
         try {
-            return db.update(categories)
+            return await db.update(categories)
             .set(category)
             .where(eq(categories.id, id))
             .execute()
@@ -39,9 +39,9 @@ export const categoriesModel = {
             throw new Error("La catégorie ne peut pas être màj");
         }
     },
-    get: (id: string) => {
+    get: async (id: string) => {
         try {
-            return db.select({
+            return await db.select({
                 name: categories.name
             })
             .from(categories)
@@ -52,9 +52,9 @@ export const categoriesModel = {
             throw new Error("La catégorie ne peut pas être récupéré");
         }
     },
-    getAll: () => {
+    getAll: async () => {
         try {
-            return db.select({
+            return await db.select({
                 name: categories.name
             })
             .from(categories)

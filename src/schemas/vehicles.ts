@@ -7,19 +7,19 @@ const gearTypeEnum = pgEnum("gear_type", ["manual", "automatic"]);
 
 export const vehicles = pgTable("vehicles", {
     id: uuid("id").defaultRandom().primaryKey(),
-    userId: uuid("id_owner").references(() => users.id, { onDelete: "cascade"}).notNull(),
+    userId: uuid("id_user").references(() => users.id, { onDelete: "cascade"}).notNull(),
     categoryId: uuid("id_category").references(() => categories.id).notNull(),
     brand: varchar("brand", { length: 100 }).notNull(),
     model: varchar("model", { length: 100 }).notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
-    mileage: integer("mileage").notNull(),
+    mileage: varchar("mileage", { length: 100 }).notNull(),//integer("mileage").notNull(),
     registrationDate: timestamp("registration_date").notNull(),
     registrationPlate: varchar("registration_plate", { length: 7 }).notNull(),
     description: varchar("description", { length: 500 }).notNull(),
-    numberOfSeats: smallint("number_of_seat").notNull(),
-    numberOfSleepingPlaces: smallint("number_of_sleeping_place").notNull(),
-    length: numeric("length", { precision: 4, scale: 2 }).notNull(),
-    height: numeric("height", { precision: 4, scale: 2 }).notNull(),
+    numberOfSeats: varchar("number_of_seat", { length: 100 }).notNull(),//smallint("number_of_seat").notNull(),
+    numberOfSleepingPlaces: varchar("number_of_sleeping_place", { length: 100 }).notNull(),//smallint("number_of_sleeping_place").notNull(),
+    length: numeric("length", { precision: 10, scale: 2 }).notNull(),
+    height: numeric("height", { precision: 10, scale: 2 }).notNull(),
     weight: numeric("weight", { precision: 10, scale: 2 }).notNull(),
     fuelType: fuelTypeEnum().notNull(),
     gearType: gearTypeEnum().notNull(),
@@ -29,5 +29,5 @@ export const vehicles = pgTable("vehicles", {
     insuranceNumber: varchar("insurance_number", { length: 100 }).notNull(),
     insuranceExpirationDate: timestamp("insurance_expiration_date").notNull(),
     basePrice: numeric("base_price", { precision: 10, scale: 2 }).notNull(),
-    isAvailable: boolean("is_available").default(false)
+    isAvailable: boolean("is_available").default(false).notNull()
 });

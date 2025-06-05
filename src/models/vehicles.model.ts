@@ -5,9 +5,9 @@ import { logger } from "../utils";
 import { and, eq } from "drizzle-orm";
 
 export const vehiclesModel = {
-    create: (vehicle: NewVehicle) => {
+    create: async (vehicle: NewVehicle) => {
         try {
-            return db.insert(vehicles).values(vehicle).returning({
+            return await db.insert(vehicles).values(vehicle).returning({
                 id: vehicles.id,
             }).execute();
         } catch (error: any) {
@@ -15,25 +15,25 @@ export const vehiclesModel = {
             throw new Error("Le véhicule n'a pas pu être créée");
         }
     },
-    delete: (id: string) => {
+    delete: async (id: string) => {
         try {
-            return db.delete(vehicles).where(eq(vehicles.id, id)).execute();
+            return await db.delete(vehicles).where(eq(vehicles.id, id)).execute();
         } catch (err: any) {
             logger.error("Impossible de supprimer le véhicule: ", err.message);
             throw new Error("Le véhicule ne peut pas être supprimé");
         }
     },
-    update: (id: string, vehicle: Partial<NewVehicle>) => {
+    update: async (id: string, vehicle: Partial<NewVehicle>) => {
         try {
-            return db.update(vehicles).set(vehicle).where(eq(vehicles.id, id)).execute()
+            return await db.update(vehicles).set(vehicle).where(eq(vehicles.id, id)).execute()
         } catch (err: any) {
             logger.error("Impossible d'update le véhicule: +", err.message);
             throw new Error("Le véhicule ne peut pas être màj");
         }
     },
-    getAllByUser: (userId: string) => {
+    getAllByUser: async (userId: string) => {
         try {
-            return db.query.vehicles.findMany({
+            return await db.query.vehicles.findMany({
                 where: eq(vehicles.userId, userId),
                 columns: {
                     id: true,
@@ -62,9 +62,9 @@ export const vehiclesModel = {
             return [];
         }
     },
-    get: (id: string) => {
+    get: async (id: string) => {
         try {
-            return db.query.vehicles.findFirst({
+            return await db.query.vehicles.findFirst({
                 where: eq(vehicles.id, id),
                 with: {
                     pictures: {
@@ -97,9 +97,9 @@ export const vehiclesModel = {
             throw new Error("Le véhicule ne peut pas être récupéré");
         }
     },
-    getAll: () => {
+    getAll: async () => {
         try {
-            return db.query.vehicles.findMany({
+            return await db.query.vehicles.findMany({
                 columns: {
                     id: true,
                     brand: true,
