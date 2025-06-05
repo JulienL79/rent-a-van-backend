@@ -39,7 +39,7 @@ export const picturesModel = {
                 src: pictures.src
             })
             .from(pictures)
-            .where(eq(pictures.vehiclesId, vehicleId))
+            .where(eq(pictures.vehicleId, vehicleId))
             .execute()
         } catch (err: any) {
             logger.error(
@@ -70,8 +70,8 @@ export const picturesModel = {
                 id: pictures.id,
                 alt: pictures.alt,
                 src: pictures.src,
-                vehiclesId: pictures.vehiclesId,
-                usersId: pictures.usersId
+                vehicleId: pictures.vehicleId,
+                userId: pictures.userId
             })
             .from(pictures)
             .execute()

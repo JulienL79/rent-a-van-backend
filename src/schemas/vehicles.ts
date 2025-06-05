@@ -7,7 +7,7 @@ const gearTypeEnum = pgEnum("gear_type", ["manual", "automatic"]);
 
 export const vehicles = pgTable("vehicles", {
     id: uuid("id").defaultRandom().primaryKey(),
-    ownerId: uuid("id_owner").references(() => users.id, { onDelete: "cascade"}).notNull(),
+    userId: uuid("id_owner").references(() => users.id, { onDelete: "cascade"}).notNull(),
     categoryId: uuid("id_category").references(() => categories.id).notNull(),
     brand: varchar("brand", { length: 100 }).notNull(),
     model: varchar("model", { length: 100 }).notNull(),

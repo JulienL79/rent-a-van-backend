@@ -46,7 +46,7 @@ const vehiclesController = {
             const { user } = response.locals;
             logger.info("[POST] Créer un véhicule") // Log d'information en couleur
             const vehicle = await vehiclesModel.create({
-                ownerId: user.id,
+                userId: user.id,
                 categoryId,
                 brand,
                 model,

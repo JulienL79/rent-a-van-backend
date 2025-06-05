@@ -1,28 +1,61 @@
 import { db } from "../config/pool";
 import { logger } from "../utils";
-import { users } from "../schemas";
+import { roles, users } from "../schemas";
 import { NewUser } from "../entities";
 import { eq } from "drizzle-orm";
 
 export const userModel = {
     getAll: async () => {
         try {
-            return await db.select({
-                id: users.id,
-                firstname: users.firstname,
-                lastname: users.lastname,
-                birthdate: users.birthdate,
-                email: users.email,
-                phoneNumber: users.phoneNumber,
-                password: users.password,
-                createdAt: users.createdAt,
-                drivingLicense: users.drivingLicense,
-                addressNumber: users.addressNumber,
-                addressStreet: users.addressStreet,
-                addressCity: users.addressCity,
-                addressZip: users.addressZip,
-                addressCountry: users.addressCountry,
-            }).from(users);
+            return await db.query.users.findMany({
+                columns: {
+                    id: true,
+                    firstname: true,
+                    lastname: true,
+                    birthdate: true,
+                    email: true,
+                    phoneNumber: true,
+                    createdAt: true,
+                    drivingLicense: true,
+                    addressNumber: true,
+                    addressStreet: true,
+                    addressCity: true,
+                    addressZip: true,
+                    addressCountry: true,
+                },
+                with: {
+                    vehicles: {
+                        columns: {
+                            id: true,
+                            brand: true,
+                            model: true,
+                            registrationPlate: true,
+                        },
+                        with: {
+                            category: {
+                                columns: {
+                                    name: true,
+                                },
+                            },
+                        },
+                    },
+                    role: {
+                        columns: {
+                            name: true,
+                        },
+                    },
+                    pictures: {
+                        where: {
+                            vehicleId: "",
+                        },
+                        columns: {
+                            id: true,
+                            src: true,
+                            alt: true,
+                        },
+                    },
+                },
+            });
         } catch (err: any) {
             logger.error(
                 `Erreur lors de la récupération des utilisateurs: ${err.message}`,
@@ -30,25 +63,131 @@ export const userModel = {
             throw new Error("Impossible de récupérer les utilisateurs");
         }
     },
-
     get: async (id: string) => {
         try {
+            return await db.query.users.findFirst({
+                columns: {
+                    id: true,
+                    firstname: true,
+                    lastname: true,
+                    phoneNumber: true,
+                    addressCity: true,
+                    addressZip: true,
+                },
+                with: {
+                    vehicles: {
+                        columns: {
+                            id: true,
+                            brand: true,
+                            model: true,
+                            registrationDate: true,
+                            isAvailable: true,
+                        },
+                        with: {
+                            category: {
+                                columns: {
+                                    name: true,
+                                },
+                            },
+                            pictures: {
+                                columns: {
+                                    id: true,
+                                    alt: true,
+                                    src: true,
+                                },
+                            },
+                        },
+                    },
+                    pictures: {
+                        where: {
+                            vehicleId: "",
+                        },
+                        column: {
+                            id: true,
+                            src: true,
+                            alt: true,
+                        },
+                    },
+                },
+            });
+        } catch (err: any) {
+            logger.error(
+                `Erreur lors de la récupération de l'utilisateur: ${err.message}`,
+            );
+            throw new Error("Impossible de récupérer l'utilisateur");
+        }
+    },
+    getDetails: async (id: string) => {
+        try {
+            return await db.query.users.findFirst({
+                columns: {
+                    id: true,
+                    firstname: true,
+                    lastname: true,
+                    birthdate: true,
+                    email: true,
+                    phoneNumber: true,
+                    createdAt: true,
+                    drivingLicense: true,
+                    addressNumber: true,
+                    addressStreet: true,
+                    addressCity: true,
+                    addressZip: true,
+                    addressCountry: true,
+                },
+                with: {
+                    vehicles: {
+                        columns: {
+                            id: true,
+                            brand: true,
+                            model: true,
+                            registrationPlate: true,
+                        },
+                        with: {
+                            category: {
+                                columns: {
+                                    name: true,
+                                },
+                            },
+                            pictures: {
+                                columns: {
+                                    id: true,
+                                    alt: true,
+                                    src: true,
+                                },
+                            },
+                        },
+                    },
+                    role: {
+                        columns: {
+                            name: true,
+                        },
+                    },
+                    pictures: {
+                        where: {
+                            vehicleId: "",
+                        },
+                        column: {
+                            id: true,
+                            src: true,
+                            alt: true,
+                        },
+                    },
+                },
+            });
+        } catch (err: any) {
+            logger.error(
+                `Erreur lors de la récupération de l'utilisateur: ${err.message}`,
+            );
+            throw new Error("Impossible de récupérer l'utilisateur");
+        }
+    },
+    getCredentials: async (id: string) => {
+        try {
             return await db.select({
-                id: users.id,
-                firstname: users.firstname,
-                lastname: users.lastname,
-                birthdate: users.birthdate,
-                email: users.email,
-                phoneNumber: users.phoneNumber,
                 password: users.password,
-                createdAt: users.createdAt,
-                drivingLicense: users.drivingLicense,
-                addressNumber: users.addressNumber,
-                addressStreet: users.addressStreet,
-                addressCity: users.addressCity,
-                addressZip: users.addressZip,
-                addressCountry: users.addressCountry,
-            }).from(users)
+            })
+                .from(users)
                 .where(eq(users.id, id));
         } catch (err: any) {
             logger.error(
@@ -57,14 +196,16 @@ export const userModel = {
             throw new Error("Impossible de récupérer l'utilisateur");
         }
     },
-
     findByCredentials: async (email: string) => {
         try {
             return await db.select({
                 id: users.id,
                 password: users.password,
                 email: users.email,
-            }).from(users)
+                firstname: users.firstname,
+                lastname: users.lastname,
+            })
+                .from(users)
                 .where(eq(users.email, email));
         } catch (err: any) {
             logger.error(
@@ -73,11 +214,29 @@ export const userModel = {
             throw new Error("Impossible de récupérer l'utilisateur");
         }
     },
-
+    getRole: async (id: string) => {
+        try {
+            return await db.select({
+                role: {
+                    name: roles.name,
+                },
+            }).from(users)
+                .leftJoin(roles, eq(users.roleId, roles.id))
+                .where(eq(users.id, id))
+                .execute();
+        } catch (err: any) {
+            logger.error(
+                `Erreur lors de la récupération du rôle de l'utilisateur ${id}: ${err.message}`,
+            );
+            throw new Error(
+                `Impossible de récupérer le rôle de l'utilisateur ${id}`,
+            );
+        }
+    },
     create: async (user: NewUser) => {
         try {
-            // On s'assure que tous les champs attendus sont bien présents
             const {
+                roleId,
                 firstname,
                 lastname,
                 birthdate,
@@ -94,6 +253,7 @@ export const userModel = {
             } = user;
 
             return await db.insert(users).values({
+                roleId,
                 firstname,
                 lastname,
                 birthdate,

@@ -9,9 +9,9 @@ export const picturesRegisterValidation = z.object({
         .trim()
         .min(1, { message: "Le texte alternatif est requis" })
         .max(255, { message: "Le texte alternatif ne doit pas dépasser 255 caractères" }),
-    usersId: z.string()
+    userId: z.string()
         .uuid({ message: "L'ID utilisateur est invalide" }),
-    vehiclesId: z.string()
+    vehicleId: z.string()
         .uuid({ message: "L'ID véhicule est invalide" })
         .optional(),
 });

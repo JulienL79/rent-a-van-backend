@@ -1,16 +1,28 @@
-import { Request, Response, NextFunction } from "express";
+import { db } from "../config/pool";
+import { NextFunction, Request, Response } from "express";
 import { APIResponse } from "../utils/response";
+import { PgTableWithColumns } from "drizzle-orm/pg-core";
+import { eq, and } from "drizzle-orm";
 
-export const isAdminOrOwner = (request: Request, response: Response, next: NextFunction) => {
-    try {
-        const { user } = response.locals
-        const { userId } = request.body
+export const isAdminOrOwner = (schema: PgTableWithColumns<any>) => {
+    return async (request: Request, response: Response, next: NextFunction) => {
+        try {
+            const { user } = response.locals;
 
-        if(!(user.id === userId) || !user.isAdmin)
-            throw new Error ()
+            if (user.isAdmin) next();
 
-        next();
-    } catch (err: any) {
-        return APIResponse(response, null, "Droits invalides", 403);
-    }
-}
+            const { id } = request.params
+            const [owner] = await db.select({ id: schema.id }).from(schema)
+                .where(
+                    and(
+                        eq(schema.userId, user.id),
+                        eq(schema.id, id)
+                    )
+                );
+            if (!owner) throw new Error();
+            next();
+        } catch (err: any) {
+            return APIResponse(response, null, "Droits invalides", 403);
+        }
+    };
+};

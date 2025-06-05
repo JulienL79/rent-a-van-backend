@@ -30,15 +30,15 @@ const picturesController = {
             const {
                 src,
                 alt,
-                vehiclesId,
+                vehicleId,
             } = picturesRegisterValidation.parse(request.body);
             const { user } = response.locals;
             logger.info("[POST] Créer une image"); // Log d'information en couleur
             const picture = await picturesModel.create({
-                usersId: user.id,
+                userId: user.id,
                 src,
                 alt,
-                vehiclesId,
+                vehicleId,
             });
             APIResponse(response, picture, "OK", 201);
         } catch (error: any) {
@@ -78,14 +78,14 @@ const picturesController = {
             const {
                 src,
                 alt,
-                vehiclesId,
+                vehicleId,
             } = picturesRegisterValidation.parse(request.body);
 
             logger.info("[UPDATE] Update une image"); // Log d'information en couleur
             await picturesModel.update(id, {
                 src,
                 alt,
-                vehiclesId,
+                vehicleId,
             });
             APIResponse(response, null, "OK", 201);
         } catch (error: any) {

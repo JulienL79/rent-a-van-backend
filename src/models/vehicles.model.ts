@@ -31,10 +31,10 @@ export const vehiclesModel = {
             throw new Error("Le véhicule ne peut pas être màj");
         }
     },
-    getAllByUser: (ownerId: string) => {
+    getAllByUser: (userId: string) => {
         try {
             return db.query.vehicles.findMany({
-                where: eq(vehicles.ownerId, ownerId),
+                where: eq(vehicles.userId, userId),
                 columns: {
                     id: true,
                     brand: true,
@@ -56,7 +56,7 @@ export const vehiclesModel = {
             });
         } catch (err: any) {
             logger.error(
-                `Impossible de récupérer les véhicules de ${ownerId}: +`,
+                `Impossible de récupérer les véhicules de ${userId}: +`,
                 err.message,
             );
             return [];
@@ -77,8 +77,8 @@ export const vehiclesModel = {
                     user: {
                         columns: {
                             id: true,
-                            firstName: true,
-                            lastName: true,
+                            firstname: true,
+                            lastname: true,
                         },
                         with: {
                             pictures: {
@@ -114,8 +114,8 @@ export const vehiclesModel = {
                     user: {
                         columns: {
                             id: true,
-                            firstName: true,
-                            lastName: true,
+                            firstname: true,
+                            lastname: true,
                         },
                     },
                 },

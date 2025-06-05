@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { APIResponse, logger } from "../utils";
+import { APIResponse, hashPassword, logger, verifyPassword } from "../utils";
 import { userModel } from "../models";
+import { userRegisterValidation } from "../validations";
 
 const usersController = {
     getAll: async (request: Request, response: Response) => {
@@ -17,7 +18,7 @@ const usersController = {
     get: async (request: Request, response: Response) => {
         try {
             const { id } = request.params;
-            const [user] = await userModel.get(id);
+            const user = await userModel.get(id);
 
             if (!user) {
                 logger.warn(`[GET] User non trouvé pour l'id: ${id}`);
@@ -34,13 +35,25 @@ const usersController = {
     update: async (request: Request, response: Response) => {
         try {
             const { id } = request.params;
-            // On ne valide ici que les champs présents dans le body
-            const updateData = request.body;
-            const [user] = await userModel.get(id);
+            
+            const updateData = userRegisterValidation.parse(request.body);
+            const user = await userModel.get(id);
             if (!user) {
                 return APIResponse(response, null, "User non trouvé", 404);
             }
-            await userModel.update(id, updateData);
+
+            if(updateData.oldPassword && updateData.password) {
+                const [oldPassword] = await userModel.getCredentials(id)
+                const validPassword = await verifyPassword(updateData.oldPassword, oldPassword.password)
+                if (!validPassword)
+                    return APIResponse(response, null, "L'ancien mot de passe est erroné", 400);
+                
+                const hash = await hashPassword(updateData.password)
+                updateData.password = hash
+            }
+            const { oldPassword, ...filteredUpdateData } = updateData;
+
+            await userModel.update(id, filteredUpdateData);
             APIResponse(response, null, "Utilisateur mis à jour", 200);
         } catch (error: any) {
             logger.error("Erreur lors de la mise à jour de l'utilisateur: " + error.message);
@@ -51,7 +64,7 @@ const usersController = {
     delete: async (request: Request, response: Response) => {
         try {
             const { id } = request.params;
-            const [user] = await userModel.get(id);
+            const user = await userModel.get(id);
             if (!user) {
                 return APIResponse(response, null, "User non trouvé", 404);
             }

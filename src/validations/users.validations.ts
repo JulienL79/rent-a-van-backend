@@ -50,4 +50,11 @@ export const userRegisterValidation = z.object({
         .trim()
         .min(1, { message: "Le pays est requis" })
         .max(255, { message: "Le pays ne doit pas dépasser 255 caractères" }),
+    oldPassword: z.string()
+        .trim()
+        .min(6, { message: "Votre mot de passe doit contenir au moins 6 caractères"})
+        .max(255, { message: "Le mot de passe ne doit pas dépasser 255 caractères" })
+        .regex(/[0-9]/, { message: "Votre mot de passe doit contenir au moins un chiffre" })
+        .regex(/[!@#$%^&*(),.?":{}|<>]/, { message: "Votre mot de passe doit contenir au moins un caractère spécial" })
+        .optional()
 });
