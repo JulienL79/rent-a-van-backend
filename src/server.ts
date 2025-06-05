@@ -1,5 +1,5 @@
 // On  importe le module express qui sera utilisé pour faire tourner notre serveur Noder
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { requestLogger } from "./middlewares";

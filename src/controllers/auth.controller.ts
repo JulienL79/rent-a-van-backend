@@ -20,7 +20,7 @@ const authController = {
             }
 
             // vérification mot de passe hashé
-            const validPassword = await verifyPassword(user.password, password);
+            const validPassword = await verifyPassword(password, user.password);
             if (!validPassword)
                 return APIResponse(response, null, "Les identifiants saisits sont incorrects", 400);
             // En dessous, on admet que le mot de passe saisit est le bon !
@@ -57,7 +57,7 @@ const authController = {
             }
 
             // On ajoute le new user dans la db avec le mdp hashé
-            const [ newUser ] = await userModel.create({ roleId: "user", firstname, lastname, birthdate, email, phoneNumber, password: hash, createdAt, drivingLicense, addressNumber, addressStreet, addressCity, addressZip, addressCountry })
+            const [ newUser ] = await userModel.create({ roleId: "00000000-0000-0000-0000-000000000002", firstname, lastname, birthdate, email, phoneNumber, password: hash, createdAt, drivingLicense, addressNumber, addressStreet, addressCity, addressZip, addressCountry })
             if (!newUser)
                 return APIResponse(response, null, "Un problème est survenu", 500);
             APIResponse(response, newUser.id, "Vous êtes inscrit", 200);
