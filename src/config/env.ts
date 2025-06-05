@@ -8,5 +8,6 @@ export const env: EnvConfig = {
     NODE_ENV: process.env.NODE_ENV as 'development' | 'production' | 'test',
     ORIGIN: process.env.ORIGIN || "http://localhost:5173",
     DATABASE_URL: process.env.DATABASE_URL || "postgresql://postgres:admin@localhost:5432/blog",
-    JWT_SECRET: process.env.JWT_SECRET || "SecretTresBienGardeNePasDivulgerPubliquement"
+    JWT_SECRET: process.env.JWT_SECRET || "SecretTresBienGardeNePasDivulgerPubliquement",
+    ROLE_USER_ID: process.env.ROLE_USER_ID || ""
 }

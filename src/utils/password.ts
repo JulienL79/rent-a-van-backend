@@ -1,5 +1,5 @@
 import argon2 from "argon2";
-import logger from "./logger";
+import { logger } from "./";
 
 //Hash d'un password
 export const hashPassword = async (password: string): Promise<string> => {
