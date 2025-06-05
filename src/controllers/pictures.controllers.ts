@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { APIResponse } from "../utils/response";
 import logger from "../utils/logger";
 import { picturesModel } from "../models";
+import { picturesRegisterValidation } from "../validations/pictures.validations";
 
 const picturesController = {
     get: async (request: Request, response: Response) => {
@@ -31,7 +32,7 @@ const picturesController = {
                 src,
                 alt,
                 vehiclesId,
-            } = request.body;
+            } = picturesRegisterValidation.parse(request.body);
             const { user } = response.locals;
             logger.info("[POST] Créer une image"); // Log d'information en couleur
             const picture = await picturesModel.create({
@@ -80,7 +81,7 @@ const picturesController = {
                 src,
                 alt,
                 vehiclesId,
-            } = request.body;
+            } = picturesRegisterValidation.parse(request.body);
 
             const { user } = response.locals;
             logger.info("[UPDATE] Update une image"); // Log d'information en couleur

@@ -6,7 +6,7 @@ const categoriesRouter = Router();
 
 categoriesRouter.get("/:id", categoriesController.get);
 
-categoriesRouter.get("/", isAuthenticated, categoriesController.getAll);
+categoriesRouter.get("/", categoriesController.getAll);
 
 categoriesRouter.post("/", isAuthenticated, categoriesController.create);
 

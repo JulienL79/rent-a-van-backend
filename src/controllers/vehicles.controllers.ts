@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { APIResponse } from "../utils/response";
 import logger from "../utils/logger";
 import { vehiclesModel } from "../models";
+import { vehiclesRegisterValidation } from "../validations/vehicles.validations";
 
 const vehiclesController = {
     get: async (request: Request, response: Response) => {
@@ -42,7 +43,7 @@ const vehiclesController = {
                 insuranceExpirationDate,
                 basePrice,
                 isAvailable
-            } = request.body;
+            } = vehiclesRegisterValidation.parse(request.body);
             const { user } = response.locals;
             logger.info("[POST] Créer un véhicule") // Log d'information en couleur
             const vehicle = await vehiclesModel.create({
@@ -56,12 +57,12 @@ const vehiclesController = {
                 description, 
                 numberOfSeats, 
                 numberOfSleepingPlaces, 
-                length, 
-                height, 
-                weight, 
-                fuelType, 
-                gearType, 
-                consumption, 
+                length,
+                height,
+                weight,
+                fuelType,
+                gearType,
+                consumption,
                 cityName,
                 cityCoordinates,
                 insuranceNumber,
@@ -113,7 +114,7 @@ const vehiclesController = {
                 insuranceExpirationDate,
                 basePrice,
                 isAvailable
-            } = request.body;
+            } = vehiclesRegisterValidation.parse(request.body)
             
             const { user } = response.locals;
             logger.info("[UPDATE] Update un véhicule") // Log d'information en couleur

@@ -14,8 +14,8 @@ export const categoriesModel = {
             })
             .execute();
         } catch (error: any) {
-            logger.error("Impossible de créer l'image:", error.message);
-            throw new Error("L'image n'a pas pu être créée");
+            logger.error("Impossible de créer la catégorie:", error.message);
+            throw new Error("La catégorie n'a pas pu être créée");
         }
     },
     delete: (id: string) => {
@@ -24,8 +24,8 @@ export const categoriesModel = {
             .where(eq(categories.id, id))
             .execute();
         } catch (err: any) {
-            logger.error("Impossible de supprimer l'image: ", err.message);
-            throw new Error("L'image ne peut pas être supprimé");
+            logger.error("Impossible de supprimer la catégorie: ", err.message);
+            throw new Error("La catégorie ne peut pas être supprimé");
         }
     },
     update: (id: string, category: Partial<NewCategory>) => {
@@ -35,8 +35,8 @@ export const categoriesModel = {
             .where(eq(categories.id, id))
             .execute()
         } catch (err: any) {
-            logger.error("Impossible d'update l'image: +", err.message);
-            throw new Error("L'image ne peut pas être màj");
+            logger.error("Impossible d'update la catégorie: +", err.message);
+            throw new Error("La catégorie ne peut pas être màj");
         }
     },
     get: (id: string) => {
@@ -48,8 +48,8 @@ export const categoriesModel = {
             .where(eq(categories.id, id))
             .execute()
         } catch (err: any) {
-            logger.error("Impossible de récupérer l'image: +", err.message);
-            throw new Error("L'image ne peut pas être récupéré");
+            logger.error("Impossible de récupérer la catégorie: +", err.message);
+            throw new Error("La catégorie ne peut pas être récupéré");
         }
     },
     getAll: () => {
@@ -61,7 +61,7 @@ export const categoriesModel = {
             .execute()
         } catch (err: any) {
             logger.error(
-                `Impossible de récupérer les images: +`,
+                `Impossible de récupérer les categories: +`,
                 err.message,
             );
             return [];

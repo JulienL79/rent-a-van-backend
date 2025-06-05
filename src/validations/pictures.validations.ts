@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const pictureRegisterValidation = z.object({
+export const picturesRegisterValidation = z.object({
     src: z.string()
         .trim()
         .url({ message: "L'URL de l'image est invalide" })
