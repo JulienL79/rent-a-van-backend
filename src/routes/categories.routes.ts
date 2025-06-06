@@ -9,10 +9,10 @@ categoriesRouter.get("/:id", categoriesController.get);
 
 categoriesRouter.get("/", categoriesController.getAll);
 
-categoriesRouter.post("/", isAuthenticated, isAdminOrOwner(categories), categoriesController.create);
+categoriesRouter.post("/", isAuthenticated(true), isAdminOrOwner(categories), categoriesController.create);
 
-categoriesRouter.put("/:id", isAuthenticated, isAdminOrOwner(categories), categoriesController.update);
+categoriesRouter.put("/:id", isAuthenticated(true), isAdminOrOwner(categories), categoriesController.update);
 
-categoriesRouter.delete("/:id", isAuthenticated, isAdminOrOwner(categories), categoriesController.delete);
+categoriesRouter.delete("/:id", isAuthenticated(true), isAdminOrOwner(categories), categoriesController.delete);
 
 export default categoriesRouter;

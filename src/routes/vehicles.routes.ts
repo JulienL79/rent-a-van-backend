@@ -9,12 +9,12 @@ vehiclesRouter.get("/:id", vehiclesController.get);
 
 vehiclesRouter.get("/user/:id", vehiclesController.getAllByUser);
 
-vehiclesRouter.get("/", isAuthenticated, isAdminOrOwner(vehicles), vehiclesController.getAll);
+vehiclesRouter.get("/", isAuthenticated(true), isAdminOrOwner(vehicles), vehiclesController.getAll);
 
-vehiclesRouter.post("/", isAuthenticated, vehiclesController.create);
+vehiclesRouter.post("/", isAuthenticated(true), vehiclesController.create);
 
-vehiclesRouter.put("/:id", isAuthenticated, isAdminOrOwner(vehicles), vehiclesController.update);
+vehiclesRouter.put("/:id", isAuthenticated(true), isAdminOrOwner(vehicles), vehiclesController.update);
 
-vehiclesRouter.delete("/:id", isAuthenticated, isAdminOrOwner(vehicles), vehiclesController.delete);
+vehiclesRouter.delete("/:id", isAuthenticated(true), isAdminOrOwner(vehicles), vehiclesController.delete);
 
 export default vehiclesRouter;

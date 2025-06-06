@@ -5,14 +5,14 @@ import { roles } from "../schemas";
 
 const rolesRouter = Router();
 
-rolesRouter.get("/:id", isAuthenticated, isAdminOrOwner(roles), rolesController.get);
+rolesRouter.get("/:id", isAuthenticated(true), isAdminOrOwner(roles), rolesController.get);
 
-rolesRouter.get("/", isAuthenticated, isAdminOrOwner(roles), rolesController.getAll);
+rolesRouter.get("/", isAuthenticated(true), isAdminOrOwner(roles), rolesController.getAll);
 
-rolesRouter.post("/", isAuthenticated, isAdminOrOwner(roles), rolesController.create);
+rolesRouter.post("/", isAuthenticated(true), isAdminOrOwner(roles), rolesController.create);
 
-rolesRouter.put("/:id", isAuthenticated, isAdminOrOwner(roles), rolesController.update);
+rolesRouter.put("/:id", isAuthenticated(true), isAdminOrOwner(roles), rolesController.update);
 
-rolesRouter.delete("/:id", isAuthenticated, isAdminOrOwner(roles), rolesController.delete);
+rolesRouter.delete("/:id", isAuthenticated(true), isAdminOrOwner(roles), rolesController.delete);
 
 export default rolesRouter;
