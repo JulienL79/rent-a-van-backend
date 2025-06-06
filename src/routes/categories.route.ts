@@ -1,13 +1,13 @@
 import { Router } from "express";
-import categoriesController from "../controllers/categories.controllers";
+import categoriesController from "../controllers/categories.controller";
 import { isAdminOrOwner, isAuthenticated } from "../middlewares";
 import { categories } from "../schemas";
 
 const categoriesRouter = Router();
 
-categoriesRouter.get("/:id", categoriesController.get);
-
 categoriesRouter.get("/", categoriesController.getAll);
+
+categoriesRouter.get("/:id", categoriesController.get);
 
 categoriesRouter.post("/", isAuthenticated(true), isAdminOrOwner(categories), categoriesController.create);
 

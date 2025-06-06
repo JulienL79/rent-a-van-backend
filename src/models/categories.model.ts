@@ -14,7 +14,7 @@ export const categoriesModel = {
             })
             .execute();
         } catch (error: any) {
-            logger.error("Impossible de créer la catégorie:", error.message);
+            logger.error("Impossible de créer la catégorie:", error);
             throw new Error("La catégorie n'a pas pu être créée");
         }
     },
@@ -23,8 +23,8 @@ export const categoriesModel = {
             return await db.delete(categories)
             .where(eq(categories.id, id))
             .execute();
-        } catch (err: any) {
-            logger.error("Impossible de supprimer la catégorie: ", err.message);
+        } catch (error: any) {
+            logger.error("Impossible de supprimer la catégorie: ", error);
             throw new Error("La catégorie ne peut pas être supprimé");
         }
     },
@@ -34,8 +34,8 @@ export const categoriesModel = {
             .set(category)
             .where(eq(categories.id, id))
             .execute()
-        } catch (err: any) {
-            logger.error("Impossible d'update la catégorie: +", err.message);
+        } catch (error: any) {
+            logger.error("Impossible d'update la catégorie: ", error);
             throw new Error("La catégorie ne peut pas être màj");
         }
     },
@@ -47,8 +47,8 @@ export const categoriesModel = {
             .from(categories)
             .where(eq(categories.id, id))
             .execute()
-        } catch (err: any) {
-            logger.error("Impossible de récupérer la catégorie: +", err.message);
+        } catch (error: any) {
+            logger.error("Impossible de récupérer la catégorie: ", error);
             throw new Error("La catégorie ne peut pas être récupéré");
         }
     },
@@ -59,11 +59,8 @@ export const categoriesModel = {
             })
             .from(categories)
             .execute()
-        } catch (err: any) {
-            logger.error(
-                `Impossible de récupérer les categories: +`,
-                err.message,
-            );
+        } catch (error: any) {
+            logger.error(`Impossible de récupérer les categories: `, error);
             return [];
         }
     },

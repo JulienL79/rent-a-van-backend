@@ -1,10 +1,10 @@
 import { Router } from "express";
-import usersRouter from "./users.routes";
-import vehiclesRouter from "./vehicles.routes";
-import authRouter from "./auth.routes";
-import categoriesRouter from "./categories.routes";
-import rolesRouter from "./roles.routes";
-import picturesRouter from "./pictures.routes";
+import usersRouter from "./users.route";
+import vehiclesRouter from "./vehicles.route";
+import authRouter from "./auth.route";
+import categoriesRouter from "./categories.route";
+import rolesRouter from "./roles.route";
+import picturesRouter from "./pictures.route";
 
 const router = Router();
 

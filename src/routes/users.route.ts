@@ -9,6 +9,8 @@ usersRouter.get("/", isAuthenticated(true), isAdminOrOwner(users), usersControll
 
 usersRouter.get("/:id", usersController.get);
 
+usersRouter.get("/details/:id", isAuthenticated(true), isAdminOrOwner(users), usersController.getDetails);
+
 usersRouter.put("/:id", isAuthenticated(true), isAdminOrOwner(users), usersController.update);
 
 usersRouter.delete("/:id", isAuthenticated(true), isAdminOrOwner(users), usersController.delete);

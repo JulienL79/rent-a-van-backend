@@ -54,10 +54,8 @@ export const userModel = {
                     },
                 },
             });
-        } catch (err: any) {
-            logger.error(
-                `Erreur lors de la récupération des utilisateurs: ${err.message}`,
-            );
+        } catch (error: any) {
+            logger.error("Erreur lors de la récupération des utilisateurs: ", error);
             throw new Error("Impossible de récupérer les utilisateurs");
         }
     },
@@ -106,10 +104,8 @@ export const userModel = {
                     },
                 },
             });
-        } catch (err: any) {
-            logger.error(
-                `Erreur lors de la récupération de l'utilisateur: ${err.message}`,
-            );
+        } catch (error: any) {
+            logger.error("Erreur lors de la récupération de l'utilisateur: ", error);
             throw new Error("Impossible de récupérer l'utilisateur");
         }
     },
@@ -169,10 +165,8 @@ export const userModel = {
                     },
                 },
             });
-        } catch (err: any) {
-            logger.error(
-                `Erreur lors de la récupération de l'utilisateur: ${err.message}`,
-            );
+        } catch (error: any) {
+            logger.error("Erreur lors de la récupération de l'utilisateur: ", error);
             throw new Error("Impossible de récupérer l'utilisateur");
         }
     },
@@ -183,10 +177,8 @@ export const userModel = {
             })
                 .from(users)
                 .where(eq(users.id, id));
-        } catch (err: any) {
-            logger.error(
-                `Erreur lors de la récupération de l'utilisateur: ${err.message}`,
-            );
+        } catch (error: any) {
+            logger.error("Erreur lors de la récupération de l'utilisateur: ", error);
             throw new Error("Impossible de récupérer l'utilisateur");
         }
     },
@@ -198,13 +190,24 @@ export const userModel = {
                 email: users.email,
                 firstname: users.firstname,
                 lastname: users.lastname,
+                tempTokenId: users.tempTokenId
             })
                 .from(users)
                 .where(eq(users.email, email));
-        } catch (err: any) {
-            logger.error(
-                `Erreur lors de la récupération de l'utilisateur: ${err.message}`,
-            );
+        } catch (error: any) {
+            logger.error("Erreur lors de la récupération de l'utilisateur: ", error);
+            throw new Error("Impossible de récupérer l'utilisateur");
+        }
+    },
+    findByPhoneNumber: async (phoneNumber: string) => {
+        try {
+            return await db.select({
+                id: users.id,
+            })
+                .from(users)
+                .where(eq(users.phoneNumber, phoneNumber));
+        } catch (error: any) {
+            logger.error("Erreur lors de la récupération de l'utilisateur: ", error);
             throw new Error("Impossible de récupérer l'utilisateur");
         }
     },
@@ -218,10 +221,8 @@ export const userModel = {
                 .leftJoin(roles, eq(users.roleId, roles.id))
                 .where(eq(users.id, id))
                 .execute();
-        } catch (err: any) {
-            logger.error(
-                `Erreur lors de la récupération du rôle de l'utilisateur ${id}: ${err.message}`,
-            );
+        } catch (error: any) {
+            logger.error(`Erreur lors de la récupération du rôle de l'utilisateur ${id}:`, error);
             throw new Error(
                 `Impossible de récupérer le rôle de l'utilisateur ${id}`,
             );
@@ -262,32 +263,24 @@ export const userModel = {
                 addressZip,
                 addressCountry,
             }).returning({ id: users.id });
-        } catch (err: any) {
-            logger.error(
-                `Erreur lors de la création de l'utilisateur: ${err.message}`,
-            );
+        } catch (error: any) {
+            logger.error("Erreur lors de la création de l'utilisateur: ", error);
             throw new Error("Impossible de créer l'utilisateur");
         }
     },
-
     update: async (id: string, user: Partial<NewUser>) => {
         try {
             return await db.update(users).set(user).where(eq(users.id, id));
-        } catch (err: any) {
-            logger.error(
-                `Erreur lors de la mise à jour de l'utilisateur: ${err.message}`,
-            );
+        } catch (error: any) {
+            logger.error("Erreur lors de la mise à jour de l'utilisateur: ", error);
             throw new Error("Impossible de mettre à jour l'utilisateur");
         }
     },
-
     delete: async (id: string) => {
         try {
             return await db.delete(users).where(eq(users.id, id));
-        } catch (err: any) {
-            logger.error(
-                `Erreur lors de la suppression de l'utilisateur: ${err.message}`,
-            );
+        } catch (error: any) {
+            logger.error("Erreur lors de la suppression de l'utilisateur: ", error);
             throw new Error("Impossible de supprimer l'utilisateur");
         }
     },

@@ -11,23 +11,23 @@ export const picturesModel = {
                 id: pictures.id,
             }).execute();
         } catch (error: any) {
-            logger.error("Impossible de créer l'image:", error.message);
+            logger.error("Impossible de créer l'image: ", error);
             throw new Error("L'image n'a pas pu être créée");
         }
     },
     delete: async (id: string) => {
         try {
             return await db.delete(pictures).where(eq(pictures.id, id)).execute();
-        } catch (err: any) {
-            logger.error("Impossible de supprimer l'image: ", err.message);
+        } catch (error: any) {
+            logger.error("Impossible de supprimer l'image: ", error);
             throw new Error("L'image ne peut pas être supprimé");
         }
     },
     update: async (id: string, picture: Partial<NewPicture>) => {
         try {
             return await db.update(pictures).set(picture).where(eq(pictures.id, id)).execute()
-        } catch (err: any) {
-            logger.error("Impossible d'update l'image: +", err.message);
+        } catch (error: any) {
+            logger.error("Impossible d'update l'image: ", error);
             throw new Error("L'image ne peut pas être màj");
         }
     },
@@ -41,11 +41,8 @@ export const picturesModel = {
             .from(pictures)
             .where(eq(pictures.vehicleId, vehicleId))
             .execute()
-        } catch (err: any) {
-            logger.error(
-                `Impossible de récupérer les images de ${vehicleId}: +`,
-                err.message,
-            );
+        } catch (error: any) {
+            logger.error(`Impossible de récupérer les images de ${vehicleId}: `, error);
             return [];
         }
     },
@@ -59,8 +56,8 @@ export const picturesModel = {
             .from(pictures)
             .where(eq(pictures.id, id))
             .execute()
-        } catch (err: any) {
-            logger.error("Impossible de récupérer l'image: +", err.message);
+        } catch (error: any) {
+            logger.error("Impossible de récupérer l'image: ", error);
             throw new Error("L'image ne peut pas être récupéré");
         }
     },
@@ -75,11 +72,8 @@ export const picturesModel = {
             })
             .from(pictures)
             .execute()
-        } catch (err: any) {
-            logger.error(
-                `Impossible de récupérer les images: +`,
-                err.message,
-            );
+        } catch (error: any) {
+            logger.error(`Impossible de récupérer les images: `, error);
             return [];
         }
     },
