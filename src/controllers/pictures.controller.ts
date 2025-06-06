@@ -79,39 +79,6 @@ const picturesController = {
             );
         }
     },
-    update: async (request: Request, response: Response) => {
-        try {
-            const { id } = request.params;
-            logger.info(`[UPDATE] Modifier l'image avec l'id: ${id}`);
-
-            const picture = await picturesModel.get(id);
-            if (!picture) {
-                logger.error("Image inexistante");
-                return APIResponse(response, null, "Image inexistante", 404);
-            }
-
-            const {
-                src,
-                alt,
-                vehicleId,
-            } = picturesRegisterValidation.parse(request.body);
-
-            await picturesModel.update(id, {
-                src,
-                alt,
-                vehicleId,
-            });
-            APIResponse(response, null, "OK", 201);
-        } catch (error: any) {
-            logger.error("Erreur lors de la màj de l'image: ", error);
-            APIResponse(
-                response,
-                null,
-                "Erreur lors de la màj de l'image",
-                500,
-            );
-        }
-    },
     getAllByVehicle: async (request: Request, response: Response) => {
         try {
             const { id } = request.params;

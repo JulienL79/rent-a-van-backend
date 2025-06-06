@@ -13,8 +13,6 @@ picturesRouter.get("/vehicle/:id", picturesController.getAllByVehicle);
 
 picturesRouter.post("/", isAuthenticated(true), picturesController.create);
 
-picturesRouter.put("/:id", isAuthenticated(true), isAdminOrOwner(pictures), picturesController.update);
-
 picturesRouter.delete("/:id", isAuthenticated(true), isAdminOrOwner(pictures), picturesController.delete);
 
 export default picturesRouter;
