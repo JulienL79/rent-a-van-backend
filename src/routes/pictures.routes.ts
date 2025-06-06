@@ -9,12 +9,12 @@ picturesRouter.get("/:id", picturesController.get);
 
 picturesRouter.get("/vehicle/:id", picturesController.getAllByVehicle);
 
-picturesRouter.get("/", isAuthenticated, isAdminOrOwner(pictures), picturesController.getAll);
+picturesRouter.get("/", isAuthenticated(true), isAdminOrOwner(pictures), picturesController.getAll);
 
-picturesRouter.post("/", isAuthenticated, picturesController.create);
+picturesRouter.post("/", isAuthenticated(true), picturesController.create);
 
-picturesRouter.put("/:id", isAuthenticated, isAdminOrOwner(pictures), picturesController.update);
+picturesRouter.put("/:id", isAuthenticated(true), isAdminOrOwner(pictures), picturesController.update);
 
-picturesRouter.delete("/:id", isAuthenticated, isAdminOrOwner(pictures), picturesController.delete);
+picturesRouter.delete("/:id", isAuthenticated(true), isAdminOrOwner(pictures), picturesController.delete);
 
 export default picturesRouter;

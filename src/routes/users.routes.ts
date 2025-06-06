@@ -5,12 +5,12 @@ import { users } from '../schemas';
 
 const usersRouter = Router();
 
-usersRouter.get("/", isAuthenticated, isAdminOrOwner(users), usersController.getAll);
+usersRouter.get("/", isAuthenticated(true), isAdminOrOwner(users), usersController.getAll);
 
 usersRouter.get("/:id", usersController.get);
 
-usersRouter.put("/:id", isAuthenticated, isAdminOrOwner(users), usersController.update);
+usersRouter.put("/:id", isAuthenticated(true), isAdminOrOwner(users), usersController.update);
 
-usersRouter.delete("/:id", isAuthenticated, isAdminOrOwner(users), usersController.delete);
+usersRouter.delete("/:id", isAuthenticated(true), isAdminOrOwner(users), usersController.delete);
 
 export default usersRouter;
