@@ -24,6 +24,16 @@ export const vehiclesModel = {
             throw new Error("Le véhicule ne peut pas être supprimé");
         }
     },
+    update: async (id: string, vehicle: Partial<NewVehicle>) => {
+        try {
+            return await db.update(vehicles).set(vehicle).where(
+                eq(vehicles.id, id),
+            ).execute();
+        } catch (error: any) {
+            logger.error("Impossible d'update le véhicule: ", error);
+            throw new Error("Le véhicule ne peut pas être màj");
+        }
+    },
     getAllByUser: async (userId: string) => {
         try {
             return await db.query.vehicles.findMany({
