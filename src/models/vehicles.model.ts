@@ -11,24 +11,17 @@ export const vehiclesModel = {
                 id: vehicles.id,
             }).execute();
         } catch (error: any) {
-            logger.error("Impossible de créer le véhicule:", error.message);
+            logger.error("Impossible de créer le véhicule:", error);
             throw new Error("Le véhicule n'a pas pu être créée");
         }
     },
     delete: async (id: string) => {
         try {
-            return await db.delete(vehicles).where(eq(vehicles.id, id)).execute();
-        } catch (err: any) {
-            logger.error("Impossible de supprimer le véhicule: ", err.message);
+            return await db.delete(vehicles).where(eq(vehicles.id, id))
+                .execute();
+        } catch (error: any) {
+            logger.error("Impossible de supprimer le véhicule: ", error);
             throw new Error("Le véhicule ne peut pas être supprimé");
-        }
-    },
-    update: async (id: string, vehicle: Partial<NewVehicle>) => {
-        try {
-            return await db.update(vehicles).set(vehicle).where(eq(vehicles.id, id)).execute()
-        } catch (err: any) {
-            logger.error("Impossible d'update le véhicule: +", err.message);
-            throw new Error("Le véhicule ne peut pas être màj");
         }
     },
     getAllByUser: async (userId: string) => {
@@ -52,17 +45,79 @@ export const vehiclesModel = {
                             src: true,
                         },
                     },
+                    category: {
+                        columns: {
+                            name: true
+                        }
+                    }
                 },
             });
-        } catch (err: any) {
-            logger.error(
-                `Impossible de récupérer les véhicules de ${userId}: +`,
-                err.message,
-            );
+        } catch (error: any) {
+            logger.error(`Impossible de récupérer les véhicules de ${userId}: +`, error);
             return [];
         }
     },
     get: async (id: string) => {
+        try {
+            return await db.query.vehicles.findFirst({
+                where: eq(vehicles.id, id),
+                columns: {
+                    id: true,
+                    brand: true,
+                    model: true,
+                    mileage: true,
+                    description: true,
+                    numberOfSeats: true,
+                    numberOfSleepingPlaces: true,
+                    length: true,
+                    height: true,
+                    weight: true,
+                    fuelType: true,
+                    gearType: true,
+                    consumption: true,
+                    registrationDate: true,
+                    cityName: true,
+                    cityCoordinates: true,
+                    basePrice: true,
+                    isAvailable: true,
+                },
+                with: {
+                    pictures: {
+                        columns: {
+                            id: true,
+                            alt: true,
+                            src: true,
+                        },
+                    },
+                    user: {
+                        columns: {
+                            id: true,
+                            firstname: true,
+                            lastname: true,
+                        },
+                        with: {
+                            pictures: {
+                                columns: {
+                                    id: true,
+                                    alt: true,
+                                    src: true,
+                                },
+                            },
+                        },
+                    },
+                    category: {
+                        columns: {
+                            name: true
+                        }
+                    }
+                },
+            });
+        } catch (error: any) {
+            logger.error("Impossible de récupérer le véhicule: ", error);
+            throw new Error("Le véhicule ne peut pas être récupéré");
+        }
+    },
+    getDetails: async (id: string) => {
         try {
             return await db.query.vehicles.findFirst({
                 where: eq(vehicles.id, id),
@@ -90,10 +145,15 @@ export const vehiclesModel = {
                             },
                         },
                     },
+                    category: {
+                        columns: {
+                            name: true
+                        }
+                    }
                 },
             });
-        } catch (err: any) {
-            logger.error("Impossible de récupérer le véhicule: +", err.message);
+        } catch (error: any) {
+            logger.error("Impossible de récupérer le véhicule: +", error);
             throw new Error("Le véhicule ne peut pas être récupéré");
         }
     },
@@ -120,11 +180,8 @@ export const vehiclesModel = {
                     },
                 },
             });
-        } catch (err: any) {
-            logger.error(
-                `Impossible de récupérer les véhicules: +`,
-                err.message,
-            );
+        } catch (error: any) {
+            logger.error(`Impossible de récupérer les véhicules: `, error);
             return [];
         }
     },

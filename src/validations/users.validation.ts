@@ -17,8 +17,8 @@ export const userRegisterValidation = z.object({
         .max(255, { message: "L'email ne doit pas dépasser 255 caractères" }),
     phoneNumber: z.string()
         .trim()
-        .min(1, { message: "Le numéro de téléphone est requis" })
-        .max(20, { message: "Le numéro de téléphone ne doit pas dépasser 20 caractères" }),
+        .length(10, { message: "Le numéro de téléphone doit contenir exactement 10 chiffres" })
+        .regex(/^\d{10}$/, { message: "Le numéro de téléphone doit être composé uniquement de chiffres" }),
     password: z.string()
         .trim()
         .min(6, { message: "Votre mot de passe doit contenir au moins 6 caractères"})

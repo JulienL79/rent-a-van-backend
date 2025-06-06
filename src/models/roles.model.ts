@@ -14,7 +14,7 @@ export const rolesModel = {
             })
             .execute();
         } catch (error: any) {
-            logger.error("Impossible de créer le role:", error.message);
+            logger.error("Impossible de créer le role:", error);
             throw new Error("Le role n'a pas pu être créée");
         }
     },
@@ -23,8 +23,8 @@ export const rolesModel = {
             return await db.delete(roles)
             .where(eq(roles.id, id))
             .execute();
-        } catch (err: any) {
-            logger.error("Impossible de supprimer le role: ", err.message);
+        } catch (error: any) {
+            logger.error("Impossible de supprimer le role: ", error);
             throw new Error("Le role ne peut pas être supprimé");
         }
     },
@@ -34,8 +34,8 @@ export const rolesModel = {
             .set(role)
             .where(eq(roles.id, id))
             .execute()
-        } catch (err: any) {
-            logger.error("Impossible d'update le role: +", err.message);
+        } catch (error: any) {
+            logger.error("Impossible d'update le role: +", error);
             throw new Error("Le role ne peut pas être màj");
         }
     },
@@ -47,8 +47,8 @@ export const rolesModel = {
             .from(roles)
             .where(eq(roles.id, id))
             .execute()
-        } catch (err: any) {
-            logger.error("Impossible de récupérer le role: +", err.message);
+        } catch (error: any) {
+            logger.error("Impossible de récupérer le role: +", error);
             throw new Error("Le role ne peut pas être récupéré");
         }
     },
@@ -59,11 +59,8 @@ export const rolesModel = {
             })
             .from(roles)
             .execute()
-        } catch (err: any) {
-            logger.error(
-                `Impossible de récupérer les roles: +`,
-                err.message,
-            );
+        } catch (error: any) {
+            logger.error(`Impossible de récupérer les roles: `, error);
             return [];
         }
     },
