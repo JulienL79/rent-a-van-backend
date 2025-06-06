@@ -23,14 +23,6 @@ export const picturesModel = {
             throw new Error("L'image ne peut pas être supprimé");
         }
     },
-    update: async (id: string, picture: Partial<NewPicture>) => {
-        try {
-            return await db.update(pictures).set(picture).where(eq(pictures.id, id)).execute()
-        } catch (error: any) {
-            logger.error("Impossible d'update l'image: ", error);
-            throw new Error("L'image ne peut pas être màj");
-        }
-    },
     getAllByVehicle: async (vehicleId: string) => {
         try {
             return await db.select({
