@@ -3,3 +3,4 @@ export * from './vehicles.model';
 export * from './pictures.model';
 export * from './roles.model';
 export * from './categories.model';
+export * from './passwordResetToken.model';

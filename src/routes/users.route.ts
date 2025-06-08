@@ -13,6 +13,8 @@ usersRouter.get("/details/:id", isAuthenticated(true), isAdminOrOwner(users), us
 
 usersRouter.put("/:id", isAuthenticated(true), isAdminOrOwner(users), usersController.update);
 
+usersRouter.put("/credentials/:id", isAuthenticated(true), isAdminOrOwner(users), usersController.updateCredentials);
+
 usersRouter.delete("/:id", isAuthenticated(true), isAdminOrOwner(users), usersController.delete);
 
 export default usersRouter;
