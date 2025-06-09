@@ -45,54 +45,12 @@ const vehiclesController = {
         try {
             logger.info("[POST] Créer un véhicule") // Log d'information en couleur
 
-            const { 
-                categoryId,
-                brand, 
-                model, 
-                mileage, 
-                registrationDate, 
-                registrationPlate, 
-                description, 
-                numberOfSeats, 
-                numberOfSleepingPlaces, 
-                length, 
-                height, 
-                weight, 
-                fuelType, 
-                gearType, 
-                consumption, 
-                cityName,
-                cityCoordinates,
-                insuranceNumber,
-                insuranceExpirationDate,
-                basePrice,
-                isAvailable
-            } = vehiclesRegisterValidation.parse(request.body);
+            const vehicleData = vehiclesRegisterValidation.parse(request.body);
             const { user } = response.locals;
 
             const vehicle = await vehiclesModel.create({
                 userId: user.id,
-                categoryId,
-                brand,
-                model,
-                mileage,
-                registrationDate, 
-                registrationPlate, 
-                description, 
-                numberOfSeats,
-                numberOfSleepingPlaces,
-                length,
-                height,
-                weight,
-                fuelType,
-                gearType,
-                consumption,
-                cityName,
-                cityCoordinates,
-                insuranceNumber,
-                insuranceExpirationDate,
-                basePrice,
-                isAvailable
+                ...vehicleData
             });
             APIResponse(response, vehicle, "OK", 201);
         } catch (error: any) {
@@ -134,53 +92,9 @@ const vehiclesController = {
                 return APIResponse(response, null, "Véhicule inexistant", 404);
             }
 
-            const { 
-                categoryId,
-                brand, 
-                model, 
-                mileage, 
-                registrationDate, 
-                registrationPlate, 
-                description, 
-                numberOfSeats, 
-                numberOfSleepingPlaces, 
-                length, 
-                height, 
-                weight, 
-                fuelType, 
-                gearType, 
-                consumption, 
-                cityName,
-                cityCoordinates,
-                insuranceNumber,
-                insuranceExpirationDate,
-                basePrice,
-                isAvailable
-            } = vehiclesRegisterValidation.parse(request.body)
+            const vehicleData = vehiclesRegisterValidation.parse(request.body)
 
-            await vehiclesModel.update(id, {
-                categoryId,
-                brand,
-                model,
-                mileage, 
-                registrationDate, 
-                registrationPlate, 
-                description, 
-                numberOfSeats, 
-                numberOfSleepingPlaces, 
-                length, 
-                height, 
-                weight, 
-                fuelType, 
-                gearType, 
-                consumption, 
-                cityName,
-                cityCoordinates,
-                insuranceNumber,
-                insuranceExpirationDate,
-                basePrice,
-                isAvailable
-            })
+            await vehiclesModel.update(id, vehicleData)
             APIResponse(response, null, "OK", 201);
         } catch (error: any) {
             logger.error("Erreur lors de la màj du véhicule: ", error);

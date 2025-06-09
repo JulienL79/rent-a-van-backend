@@ -4,3 +4,4 @@ export * from './Picture';
 export * from './Category';
 export * from './Role';
 export * from './PasswordResetToken';
+export * from './Message';

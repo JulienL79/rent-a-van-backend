@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const vehiclesRegisterValidation = z.object({
-    userId: z.string().uuid({ message: "ID propriétaire invalide" }).optional(),
     categoryId: z.string().uuid({ message: "ID catégorie invalide" }),
     brand: z.string()
         .trim()

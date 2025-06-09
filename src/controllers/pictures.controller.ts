@@ -31,18 +31,12 @@ const picturesController = {
         try {
             logger.info("[POST] Créer une image"); // Log d'information en couleur
 
-            const {
-                src,
-                alt,
-                vehicleId,
-            } = picturesRegisterValidation.parse(request.body);
+            const pictureData = picturesRegisterValidation.parse(request.body);
             const { user } = response.locals;
             
             const picture = await picturesModel.create({
                 userId: user.id,
-                src,
-                alt,
-                vehicleId,
+                ...pictureData
             });
             APIResponse(response, picture, "OK", 201);
         } catch (error: any) {

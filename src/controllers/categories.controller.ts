@@ -37,11 +37,11 @@ const categoriesController = {
             });
             APIResponse(response, category, "OK", 201);
         } catch (error: any) {
-            logger.error("Erreur lors de la récupération de la categorie: ", error);
+            logger.error("Erreur lors de la création de la categorie: ", error);
             APIResponse(
                 response,
                 null,
-                "Erreur lors de la récupération de la categorie",
+                "Erreur lors de la création de la categorie",
                 500,
             );
         }

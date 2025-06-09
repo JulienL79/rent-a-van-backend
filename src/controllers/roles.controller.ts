@@ -40,11 +40,11 @@ const rolesController = {
             });
             APIResponse(response, role, "OK", 201);
         } catch (error: any) {
-            logger.error("Erreur lors de la récupération du role: ", error);
+            logger.error("Erreur lors de la création du role: ", error);
             APIResponse(
                 response,
                 null,
-                "Erreur lors de la récupération du role",
+                "Erreur lors de la création du role",
                 500,
             );
         }

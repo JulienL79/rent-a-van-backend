@@ -4,3 +4,4 @@ export * from './vehicles.controller';
 export * from './pictures.controller';
 export * from './roles.controller';
 export * from './categories.controller';
+export * from './messages.controller';

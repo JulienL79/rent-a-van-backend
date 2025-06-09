@@ -6,6 +6,7 @@ import categoriesRouter from "./categories.route";
 import rolesRouter from "./roles.route";
 import picturesRouter from "./pictures.route";
 import resetRouter from "./reset.route";
+import messagesRouter from "./messages.route";
 
 const router = Router();
 
@@ -21,6 +22,8 @@ router.use('/roles', rolesRouter);
 
 router.use('/pictures', picturesRouter);
 
-router.use('/reset', resetRouter)
+router.use('/reset', resetRouter);
+
+router.use('/messages', messagesRouter);
 
 export default router;

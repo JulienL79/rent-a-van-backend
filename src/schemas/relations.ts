@@ -1,5 +1,13 @@
 import { relations } from "drizzle-orm";
-import { users, roles, categories, vehicles, pictures, passwordResetToken } from "./";
+import {
+    categories,
+    messages,
+    passwordResetToken,
+    pictures,
+    roles,
+    users,
+    vehicles,
+} from "./";
 
 export const userRelations = relations(users, ({ many, one }) => ({
     vehicles: many(vehicles), // un user peut avoir plusieurs vehicules
@@ -9,19 +17,25 @@ export const userRelations = relations(users, ({ many, one }) => ({
         // 1erement, on recup la colonne qui fait ref à users dans la table comment
         fields: [users.roleId],
         // 2emement on recup la colonne/table qui fait ref à la colonne authorId de la table comments
-        references: [roles.id]
-    })
+        references: [roles.id],
+    }),
+    sentMessages: many(messages, {
+        relationName: "sentMessages"
+    }),
+    receivedMessages: many(messages, {
+        relationName: "receivedMessages",
+    }),
 }));
 
 export const vehicleRelations = relations(vehicles, ({ many, one }) => ({
     pictures: many(pictures),
     user: one(users, {
         fields: [vehicles.userId],
-        references: [users.id]
+        references: [users.id],
     }),
     category: one(categories, {
         fields: [vehicles.categoryId],
-        references: [categories.id]
+        references: [categories.id],
     }),
 }));
 
@@ -33,20 +47,34 @@ export const roleRelations = relations(roles, ({ many }) => ({
     users: many(users),
 }));
 
-export const passwordResetTokenRelations = relations(passwordResetToken, ({ one }) => ({
-    user: one(users, {
-        fields: [passwordResetToken.userId],
-        references: [users.id]
+export const passwordResetTokenRelations = relations(
+    passwordResetToken,
+    ({ one }) => ({
+        user: one(users, {
+            fields: [passwordResetToken.userId],
+            references: [users.id],
+        }),
     }),
-}));
+);
 
 export const pictureRelations = relations(pictures, ({ one }) => ({
     user: one(users, {
         fields: [pictures.userId],
-        references: [users.id]
+        references: [users.id],
     }),
     vehicle: one(vehicles, {
         fields: [pictures.vehicleId],
-        references: [vehicles.id]
+        references: [vehicles.id],
+    }),
+}));
+
+export const messageRelations = relations(messages, ({ one }) => ({
+    sender: one(users, {
+        fields: [messages.senderId],
+        references: [users.id],
+    }),
+    receiver: one(users, {
+        fields: [messages.receiverId],
+        references: [users.id],
     }),
 }));
