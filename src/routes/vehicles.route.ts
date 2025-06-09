@@ -7,11 +7,11 @@ const vehiclesRouter = Router();
 
 vehiclesRouter.get("/", isAuthenticated(true), isAdminOrOwner(vehicles), vehiclesController.getAll);
 
-vehiclesRouter.get("/:id", vehiclesController.get);
-
 vehiclesRouter.get("/details/:id", isAuthenticated(true), isAdminOrOwner(vehicles), vehiclesController.getDetails);
 
 vehiclesRouter.get("/user/:id", vehiclesController.getAllByUser);
+
+vehiclesRouter.get("/:id", vehiclesController.get);
 
 vehiclesRouter.post("/", isAuthenticated(true), vehiclesController.create);
 

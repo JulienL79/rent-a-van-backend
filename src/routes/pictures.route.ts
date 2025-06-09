@@ -7,9 +7,9 @@ const picturesRouter = Router();
 
 picturesRouter.get("/", isAuthenticated(true), isAdminOrOwner(pictures), picturesController.getAll);
 
-picturesRouter.get("/:id", picturesController.get);
-
 picturesRouter.get("/vehicle/:id", picturesController.getAllByVehicle);
+
+picturesRouter.get("/:id", picturesController.get);
 
 picturesRouter.post("/", isAuthenticated(true), picturesController.create);
 

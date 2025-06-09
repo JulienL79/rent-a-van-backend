@@ -64,6 +64,12 @@ export const isAuthenticated = (isExpected: boolean) => {
                 next();
 
             } catch (error: any) {
+                if (error.name === "TokenExpiredError") {
+                    response.clearCookie("accessToken");
+                    logger.error("Votre session a expiré");
+                    return APIResponse(response, null, "Votre session a expiré, veuillez vous reconnecter", 401);
+                }
+
                 logger.error("Token invalide", error);
                 return APIResponse(response, null, "Token invalide", 401);
             }

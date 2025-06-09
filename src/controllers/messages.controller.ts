@@ -59,15 +59,23 @@ const messagesController = {
 
             logger.info(`[UPDATE] Modifier le message avec l'id: ${id}`);
 
-            const message = await messagesModel.get(id);
+            const [message] = await messagesModel.get(id);
             if (!message) {
                 logger.error("Message inexistant");
                 return APIResponse(response, null, "Message inexistant", 404);
             }
 
             const messageData = messagesUpdateValidation.parse(request.body);
+            const isEdited = messageData.content ? messageData.content !== message.content : false;
+            const updatedAt = new Date();
+            updatedAt.setHours(updatedAt.getHours() + 2);
 
-            await messagesModel.update(id, messageData);
+            await messagesModel.update(id, {
+                updatedAt,
+                isEdited,
+                ...messageData
+            });
+
             APIResponse(response, null, "OK", 201);
         } catch (error: any) {
             logger.error("Erreur lors de la màj du message: ", error);

@@ -8,9 +8,9 @@ const usersRouter = Router();
 
 usersRouter.get("/", isAuthenticated(true), isAdminOrOwner(users), usersController.getAll);
 
-usersRouter.get("/:id", usersController.get);
-
 usersRouter.get("/details/:id", isAuthenticated(true), isAdminOrOwner(users), usersController.getDetails);
+
+usersRouter.get("/:id", usersController.get);
 
 usersRouter.put("/:id", isAuthenticated(true), isAdminOrOwner(users), usersController.update);
 

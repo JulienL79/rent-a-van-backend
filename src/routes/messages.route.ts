@@ -7,11 +7,11 @@ const messagesRouter = Router();
 
 messagesRouter.get("/", isAuthenticated(true), isAdminOrOwner(messages), messagesController.getAll);
 
+messagesRouter.get("/chat/", isAuthenticated(true), messagesController.getAllChatsByUser);
+
+messagesRouter.get("/chat/:id", isAuthenticated(true), messagesController.getAllFromChat);
+
 messagesRouter.get("/:id", isAuthenticated(true), isAdminOrOwner(messages), messagesController.get);
-
-messagesRouter.get("/chat", isAuthenticated(true), isAdminOrOwner(messages), messagesController.getAllChatsByUser);
-
-messagesRouter.get("/chat/:id", isAuthenticated(true), isAdminOrOwner(messages), messagesController.getAllFromChat);
 
 messagesRouter.post("/", isAuthenticated(true), messagesController.create);
 

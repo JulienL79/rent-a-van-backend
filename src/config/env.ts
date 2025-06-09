@@ -12,5 +12,6 @@ export const env: EnvConfig = {
     ROLE_USER_ID: process.env.ROLE_USER_ID || "",
     RESET_MAIL_ADDRESS: process.env.RESET_MAIL_ADDRESS || "reset@gmail.com",
     WEBSITE_URL: process.env.WEBSITE_URL || "https://rent-a-van.com",
-    PASSWORD_RESET_MAIL:  process.env.PASSWORD_RESET_MAIL || "reset"
+    PASSWORD_RESET_MAIL:  process.env.PASSWORD_RESET_MAIL || "reset",
+    TZ: process.env.TZ || "Europe/Paris",
 }

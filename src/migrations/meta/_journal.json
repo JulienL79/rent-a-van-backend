@@ -71,6 +71,13 @@
       "when": 1749476474799,
       "tag": "0009_luxuriant_maverick",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1749478577966,
+      "tag": "0010_noisy_katie_power",
+      "breakpoints": true
     }
   ]
 }
