@@ -3,6 +3,7 @@ import { APIResponse, hashPassword, logger, verifyPassword } from "../utils";
 import { passwordResetTokenModel, userModel } from "../models";
 import { emailValidation, updateCredentialsValidation, userRegisterValidation, userUpdateValidation } from "../validations";
 import { sendResetEmail } from "../utils/mailer";
+import { z } from "zod";
 
 const usersController = {
     getAll: async (request: Request, response: Response) => {
@@ -10,6 +11,7 @@ const usersController = {
             logger.info("[GET] Récupérer tous les users");
             const users = await userModel.getAll();
             APIResponse(response, users, "OK");
+
         } catch (error: any) {
             logger.error("Erreur lors de la récupération des users: ", error);
             APIResponse(response, null, "Erreur lors de la récupération des users", 500);
@@ -28,6 +30,7 @@ const usersController = {
                 return APIResponse(response, null, "User inexistant", 404);
             }
             APIResponse(response, user, "OK");
+
         } catch (error: any) {
             logger.error("Erreur lors de la récupération de l'user: ", error);
             APIResponse(response, null, "Erreur lors de la récupération de l'user", 500);
@@ -46,6 +49,7 @@ const usersController = {
                 return APIResponse(response, null, "User inexistant", 404);
             }
             APIResponse(response, user, "OK");
+
         } catch (error: any) {
             logger.error("Erreur lors de la récupération de l'user: ", error);
             APIResponse(response, null, "Erreur lors de la récupération de l'user", 500);
@@ -67,8 +71,12 @@ const usersController = {
 
             await userModel.update(id, updateData);
             APIResponse(response, null, "Utilisateur mis à jour", 200);
+
         } catch (error: any) {
             logger.error("Erreur lors de la mise à jour de l'utilisateur: ", error);
+            if (error instanceof z.ZodError) {
+                return APIResponse(response, error.errors, "Le formulaire est invalide", 400);
+            }
             APIResponse(response, null, "Erreur lors de la mise à jour de l'utilisateur", 500);
         }
     },
@@ -110,34 +118,14 @@ const usersController = {
             };
 
             await userModel.update(id, filteredUpdateData);
+
             APIResponse(response, null, "Utilisateur mis à jour", 200);
+
         } catch (error: any) {
             logger.error("Erreur lors de la mise à jour de l'utilisateur: ", error);
-            APIResponse(response, null, "Erreur lors de la mise à jour de l'utilisateur", 500);
-        }
-    },
-    requestResetPassword: async (request: Request, response: Response) => {
-        try {
-            logger.info(`[POST] Demande de réinitialisation de mot de passe`);
-
-            const { email } = request.body
-
-            const [ user ] = await userModel.findByCredentials(email);
-            if (!user) {
-                logger.error("Adresse mail non reliée à un compte");
-                return APIResponse(response, null, "Si un compte est associé à cette adresse, un email de réinitialisation a été envoyé.", 200);
+            if (error instanceof z.ZodError) {
+                return APIResponse(response, error.errors, "Le formulaire est invalide", 400);
             }
-
-            const [{ token }] = await passwordResetTokenModel.create({
-                expiresAt: new Date(Date.now() + 15 * 60 * 1000), // expiration après 15 minutes
-                userId: user.id
-            })
-
-            await sendResetEmail(email, token)
-
-            APIResponse(response, null, "Si un compte est associé à cette adresse, un email de réinitialisation a été envoyé.", 200);
-        } catch (error: any) {
-            logger.error("Erreur lors de la mise à jour de l'utilisateur: ", error);
             APIResponse(response, null, "Erreur lors de la mise à jour de l'utilisateur", 500);
         }
     },
@@ -154,7 +142,15 @@ const usersController = {
             }
 
             await userModel.delete(id);
-            APIResponse(response, null, "Utilisateur supprimé", 200);
+
+            // Si l'utilisateur N'EST PAS admin, il doit être déconnecté
+            if (!response.locals.user.isAdmin) {
+                response.clearCookie("accessToken");
+                return APIResponse(response, null, "Utilisateur supprimé et déconnecté", 200);
+            }
+
+            return APIResponse(response, null, "Utilisateur supprimé", 200);
+
         } catch (error: any) {
             logger.error("Erreur lors de la suppression de l'utilisateur: ", error);
             APIResponse(response, null, "Erreur lors de la suppression de l'utilisateur", 500);

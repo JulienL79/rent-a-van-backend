@@ -22,7 +22,7 @@ export const sendResetEmail = async (userEmail: string, resetToken: string) => {
     };
 
     try {
-        await transporter.sendMail(mailOptions);
+        // await transporter.sendMail(mailOptions);
         logger.info("Email envoyé! ")
     } catch (error: any) {
         logger.error("Erreur d'envoi :", error);

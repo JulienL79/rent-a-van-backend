@@ -115,13 +115,17 @@ export const updateCredentialsValidation = z.object({
         .regex(/[0-9]/, { message: "Votre mot de passe doit contenir au moins un chiffre" })
         .regex(/[!@#$%^&*(),.?":{}|<>]/, { message: "Votre mot de passe doit contenir au moins un caractère spécial" })
         .optional(),
+    confirmPassword: z.string()
+        .trim()
+        .min(6, { message: "Votre mot de passe doit contenir au moins 6 caractères"})
+        .max(255, { message: "Le mot de passe ne doit pas dépasser 255 caractères" }),
     oldPassword: z.string()
         .trim()
         .min(6, { message: "Votre mot de passe doit contenir au moins 6 caractères"})
         .max(255, { message: "Le mot de passe ne doit pas dépasser 255 caractères" })
         .regex(/[0-9]/, { message: "Votre mot de passe doit contenir au moins un chiffre" })
         .regex(/[!@#$%^&*(),.?":{}|<>]/, { message: "Votre mot de passe doit contenir au moins un caractère spécial" })
-});
+}).refine((data) => data.password === data.confirmPassword, {message: "Les mots de passe doivent être identiques."});
 
 export const resetPasswordValidation = z.object({
     password: z.string()
@@ -134,5 +138,4 @@ export const resetPasswordValidation = z.object({
         .trim()
         .min(6, { message: "Votre mot de passe doit contenir au moins 6 caractères"})
         .max(255, { message: "Le mot de passe ne doit pas dépasser 255 caractères" }),
-    token: z.string().uuid({ message: "Token invalide" }),
 }).refine((data) => data.password === data.confirmPassword, {message: "Les mots de passe doivent être identiques."})

@@ -40,15 +40,16 @@ export const isAuthenticated = (isExpected: boolean) => {
 
                 // On récupère le rôle du user pour l'intégrer en response.locals
                 const [role] = await userModel.getRole(response.locals.user.id);
+
                 // On récupère le token temporaire en BDD pour vérifier s'il est cohérent avec celui du token actuel
                 const [tempTokenDb] = await db.select({ id: users.tempTokenId })
-                    .from(users).where(eq(users.id, response.locals.user.id));
-
+                    .from(users)
+                    .where(eq(users.id, response.locals.user.id));
                 const isSameToken =
-                    tempTokenDb.id === response.locals.user.tempTokenId;
+                    tempTokenDb?.id === response.locals.user.tempTokenId;
 
-                if (!isSameToken) {
-                    // Il y a eu changement du token temp (changement mdp) donc déconnexion
+                // Il y a eu changement du token temp (changement mdp) ou le user a été supprimé -> Déconnexion
+                if (!role || !tempTokenDb || !isSameToken) { 
                     response.clearCookie("accessToken");
                     logger.error("Token invalide");
                     return APIResponse(
@@ -61,6 +62,7 @@ export const isAuthenticated = (isExpected: boolean) => {
 
                 response.locals.user.isAdmin = role.role?.name === "admin";
                 next();
+
             } catch (error: any) {
                 logger.error("Token invalide", error);
                 return APIResponse(response, null, "Token invalide", 401);

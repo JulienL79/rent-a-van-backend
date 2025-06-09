@@ -4,6 +4,7 @@ import { APIResponse } from "../utils/response";
 import { PgTableWithColumns } from "drizzle-orm/pg-core";
 import { eq, and } from "drizzle-orm";
 import { logger } from "../utils";
+import { users } from "../schemas";
 
 export const isAdminOrOwner = (schema: PgTableWithColumns<any>) => {
     return async (request: Request, response: Response, next: NextFunction) => {
@@ -15,14 +16,31 @@ export const isAdminOrOwner = (schema: PgTableWithColumns<any>) => {
                 return next();
 
             const { id } = request.params
-            const [owner] = await db.select({ id: schema.id }).from(schema)
-                .where(
-                    and(
-                        eq(schema.userId, user.id),
-                        eq(schema.id, id)
-                    )
-                );
-            if (!owner) throw new Error();
+
+            if(schema === users) {
+
+                const [owner] = await db.select({ id: schema.id }).from(schema)
+                    .where(
+                        and(
+                            eq(schema.id, user.id),
+                            eq(schema.id, id)
+                        )
+                    );
+                if (!owner) throw new Error();
+
+            } else {
+
+                const [owner] = await db.select({ id: schema.id }).from(schema)
+                    .where(
+                        and(
+                            eq(schema.userId, user.id),
+                            eq(schema.id, id)
+                        )
+                    );
+                if (!owner) throw new Error();
+
+            }
+
             return next();
         } catch (error: any) {
             logger.error("Droits invalides", error);

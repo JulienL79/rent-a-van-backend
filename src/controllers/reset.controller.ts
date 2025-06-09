@@ -3,6 +3,7 @@ import { APIResponse, hashPassword, logger, verifyPassword } from "../utils";
 import { passwordResetTokenModel, userModel } from "../models";
 import { emailValidation, resetPasswordValidation, updateCredentialsValidation, userRegisterValidation, userUpdateValidation } from "../validations";
 import { sendResetEmail } from "../utils/mailer";
+import { z } from "zod";
 
 const resetController = {
     requestResetPassword: async (request: Request, response: Response) => {
@@ -27,14 +28,17 @@ const resetController = {
             return APIResponse(response, null, "Si un compte est associé à cette adresse, un email de réinitialisation a été envoyé.", 200);
         } catch (error: any) {
             logger.error("Erreur lors de la mise à jour de l'utilisateur: ", error);
+            if (error instanceof z.ZodError) {
+                return APIResponse(response, error.errors, "Le formulaire est invalide", 400);
+            }
             APIResponse(response, null, "Erreur lors de la mise à jour de l'utilisateur", 500);
         }
     },
     resetPassword : async (request: Request, response: Response) => {
         try {
             logger.info(`[UPDATE] Modification du mot de passe`);
-
-            const { token, password } = resetPasswordValidation.parse(request.body);
+            const { token } = request.params
+            const { password } = resetPasswordValidation.parse(request.body);
 
             // Vérifier la validité du token
             const [tokenData] = await passwordResetTokenModel.getByToken(token);
@@ -45,9 +49,13 @@ const resetController = {
 
             // Hasher le nouveau mot de passe
             const hash = await hashPassword(password);
+            const uuid = crypto.randomUUID()
 
             // Mettre à jour le mot de passe de l'utilisateur
-            await userModel.update(tokenData.userId, {password: hash})
+            await userModel.update(tokenData.userId, {
+                password: hash,
+                tempTokenId: uuid
+            })
 
             // Invalider le token
             await passwordResetTokenModel.update(tokenData.id, {isUsed: true});
@@ -55,6 +63,9 @@ const resetController = {
             APIResponse(response, null, "Mot de passe réinitialisé avec succès.", 200);
         } catch (error: any) {
             logger.error("Erreur lors de la mise à jour de l'utilisateur: ", error);
+            if (error instanceof z.ZodError) {
+                return APIResponse(response, error.errors, "Le formulaire est invalide", 400);
+            }
             APIResponse(response, null, "Erreur lors de la mise à jour de l'utilisateur", 500);
         }
     }

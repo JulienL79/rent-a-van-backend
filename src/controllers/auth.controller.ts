@@ -69,12 +69,12 @@ const authController = {
                 return APIResponse(response, null, "Un problème est survenu lors du hash", 500);
             }
 
-            const [role] = await db.select({ id: roles.id }).from(roles).where(eq(roles.name, "user"))
+            const [role] = await db.select({ id: roles.id }).from(roles).where(eq(roles.name, "user"));
 
             // On ajoute le new user dans la db avec le mdp hashé
             const [ newUser ] = await userModel.create({ roleId: role.id, firstname, lastname, birthdate, email, phoneNumber, password: hash, createdAt, drivingLicense, addressNumber, addressStreet, addressCity, addressZip, addressCountry })
             if (!newUser) {
-                logger.error("Un problème est survenu lors de la création")
+                logger.error("Un problème est survenu lors de la création");
                 return APIResponse(response, null, "Un problème est survenu lors de la création", 500);
             }
                 

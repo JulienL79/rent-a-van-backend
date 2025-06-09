@@ -184,6 +184,9 @@ const vehiclesController = {
             APIResponse(response, null, "OK", 201);
         } catch (error: any) {
             logger.error("Erreur lors de la màj du véhicule: ", error);
+            if (error instanceof z.ZodError) {
+                return APIResponse(response, error.errors, "Le formulaire est invalide", 400);
+            }
             APIResponse(response, null, "Erreur lors de la màj du véhicule", 500);
         }
     },

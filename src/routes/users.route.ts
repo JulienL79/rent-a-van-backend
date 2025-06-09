@@ -2,6 +2,7 @@ import { Router } from 'express';
 import usersController from '../controllers/users.controller';
 import { isAdminOrOwner, isAuthenticated } from '../middlewares';
 import { users } from '../schemas';
+import authController from '../controllers/auth.controller';
 
 const usersRouter = Router();
 

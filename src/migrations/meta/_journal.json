@@ -43,6 +43,27 @@
       "when": 1749204415499,
       "tag": "0005_salty_husk",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1749408997654,
+      "tag": "0006_complete_talkback",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1749463045251,
+      "tag": "0007_lethal_maximus",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1749463625983,
+      "tag": "0008_brave_tomorrow_man",
+      "breakpoints": true
     }
   ]
 }
