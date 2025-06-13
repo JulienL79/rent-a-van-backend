@@ -7,6 +7,7 @@ import rolesRouter from "./roles.route";
 import picturesRouter from "./pictures.route";
 import resetRouter from "./reset.route";
 import messagesRouter from "./messages.route";
+import pricePeriodsRouter from "./pricePeriods.route";
 
 const router = Router();
 
@@ -25,5 +26,7 @@ router.use('/pictures', picturesRouter);
 router.use('/reset', resetRouter);
 
 router.use('/messages', messagesRouter);
+
+router.use('/coefficients', pricePeriodsRouter);
 
 export default router;

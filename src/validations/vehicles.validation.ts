@@ -53,8 +53,9 @@ export const vehiclesRegisterValidation = z.object({
         .trim()
         .max(100, { message: "Le numéro d'assurance ne doit pas dépasser 100 caractères" }),
     insuranceExpirationDate: z.coerce.date({ required_error: "La date d'expiration de l'assurance est requise" }),
-    basePrice: z.coerce.string()
-        .refine((val) => !isNaN(parseFloat(val)), { message: "Le prix de base doit être un nombre valide" })
-        .refine((val) => parseFloat(val) > 0, { message: "Le prix de base doit être supérieur à 0" }),
+    basePrice: z.number()
+        .min(0, { message: "Le prix journalier doit être positif" })
+        .max(1000, { message: "Le prix journalier ne doit pas dépasser 1000€" })
+        .transform((val) => val.toFixed(2)),
     isAvailable: z.boolean().default(false).optional()
 });

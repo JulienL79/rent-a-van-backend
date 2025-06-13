@@ -5,6 +5,8 @@ export * from './categories';
 export * from './roles';
 export * from './passwordResetToken';
 export * from './messages';
+export * from './pricePeriods';
+
 
 // LE SCHEMA DE RELATION TOUJOURS TOUJOURS TOUJOURS EXPORT EN DERNIER DANS LE BARREL
 export * from "./relations";

@@ -8,6 +8,7 @@ export const messages = pgTable("messages", {
     content: varchar("content", { length: 500 }).notNull(),
     senderId: uuid("id_sender").references(() => users.id, { onDelete: "set null"}),
     receiverId: uuid("id_receiver").references(() => users.id, { onDelete: "set null"}),
+    messageLinked: uuid("message_linked"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     isEdited: boolean("is_edited").default(false).notNull(),
     updatedAt: timestamp("updated_at"),

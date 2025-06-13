@@ -5,3 +5,4 @@ export * from './Category';
 export * from './Role';
 export * from './PasswordResetToken';
 export * from './Message';
+export * from './PricePeriod';
